@@ -1,0 +1,82 @@
+{
+  "name": "@fabrix/spool-sequelize",
+  "version": "1.0.0-alpha.1",
+  "description": "Spool - Sequelize.js Spool http://sequelizejs.com",
+  "scripts": {
+    "build": "tsc -p ./lib/tsconfig.release.json",
+    "lint": "tslint -p ./lib",
+    "watch": "tsc -w -p ./lib/tsconfig.release.json",
+    "test": "npm run clean && npm run lint && npm run build && nyc mocha",
+    "prepublishOnly": "npm run compile",
+    "compile": "npm run clean && npm run build",
+    "clean": "rm -rf dist",
+    "ci": "cd .. && ci"
+  },
+  "homepage": "https://fabrix.app",
+  "author": {
+    "name": "scott-wyatt",
+    "email": "scottwyatt86@gmail.com",
+    "url": "https://cali-style.com"
+  },
+  "contributors": [
+    {
+      "name": "Jaumard",
+      "url": "https://github.com/jaumard"
+    }
+  ],
+  "keywords": [
+    "spool",
+    "fabrix",
+    "trailjs",
+    "sequelize",
+    "orm",
+    "datastore",
+    "database"
+  ],
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "pre-commit": [
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabrix-app/spool-sequelize.git"
+  },
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "joi": "^10.1.0",
+    "sequelize": "^4.17.2"
+  },
+  "devDependencies": {
+    "@fabrix/fabrix": "^1.0.0-alpha.5",
+    "@fabrix/lint": "^1.0.0-alpha.3",
+    "@fabrix/spool-router": "^1.0.0-alpha.4",
+    "@fabrix/spool-tapestries": "^1.0.0-alpha.4",
+    "@types/lodash": "^4.14.109",
+    "@types/node": "~10.3.2",
+    "pg": "^6.4.2",
+    "mocha": "^5",
+    "nyc": "^12.0.2",
+    "smokesignals": "^3",
+    "sqlite3": "^4.0.0",
+    "tslib": "~1.9.0",
+    "tslint": "~5.10.0",
+    "tslint-microsoft-contrib": "~5.0.3",
+    "tsutils": "~2.27.1",
+    "typescript": "~2.8.1"
+  },
+  "peerDependencies": {
+    "@fabrix/fabrix": "^1.0.0-alpha.5",
+    "@fabrix/spool-router": "^1.0.0-alpha.4"
+  },
+  "engines": {
+    "node": ">= 7.6.0"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fabrix-app/spool-tapestries/issues"
+  }
+}
