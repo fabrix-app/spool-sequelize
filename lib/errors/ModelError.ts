@@ -1,6 +1,6 @@
 export class ModelError extends Error {
-  code
-  errors
+  public code
+  public errors
 
   constructor(code, message, errors?) {
     super(message)

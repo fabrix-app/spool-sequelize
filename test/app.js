@@ -2,6 +2,7 @@
 
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
+const testModel = require('./testmodel')
 
 require('@fabrix/fabrix')
 
@@ -168,7 +169,8 @@ const App = {
             afterValidate: Sequelize.INTEGER
           }
         }
-      }
+      },
+      testModel
     }
   },
   config: {
@@ -181,18 +183,21 @@ const App = {
     },
     stores: {
       teststore: {
+        migrate: 'drop',
         orm: 'sequelize',
         database: 'Sequelize',
         host: '127.0.0.1',
         dialect: 'postgres'
       },
       storeoverride: {
+        migrate: 'drop',
         orm: 'sequelize',
         database: 'Sequelize',
         host: '127.0.0.1',
         dialect: 'postgres'
       },
       uristore: {
+        migrate: 'drop',
         orm: 'sequelize',
         uri: 'sqlite://testuser:password@testhost:1234/testdb'
       }

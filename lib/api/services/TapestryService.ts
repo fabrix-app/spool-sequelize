@@ -23,7 +23,7 @@ export class TapestryService extends Service {
    * @private
    */
   _getModel(modelName) {
-    return this.app.orm[modelName] || this.app.spools['sequelize'].orm[modelName]
+    return this.app.models[modelName] || this.app.spools['sequelize'].models[modelName]
   }
 
   /**
@@ -37,7 +37,7 @@ export class TapestryService extends Service {
    */
   create(modelName, values, options) {
     const Model = this._getModel(modelName)
-    const modelOptions = _.defaultsDeep({}, options, this.app.config.get('footprints.models.options'))
+    const modelOptions = _.defaultsDeep({}, options, this.app.config.get('tapestries.models.options'))
     if (!Model) {
       return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
     }
@@ -76,7 +76,7 @@ export class TapestryService extends Service {
    */
   find(modelName, criteria, options) {
     const Model = this._getModel(modelName)
-    const modelOptions = _.defaultsDeep({}, options, this.app.config.get( 'tapestries.models.options'))
+    const modelOptions = _.defaultsDeep({}, options, this.app.config.get('tapestries.models.options'))
     let query
     if (!Model) {
       return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
