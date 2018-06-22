@@ -1,7 +1,7 @@
 {
   "name": "@fabrix/spool-sequelize",
   "version": "1.0.0-alpha.7",
-  "description": "Spool - Sequelize.js Spool http://sequelizejs.com",
+  "description": "Spool - Datastore Spool for Sequelize.js http://sequelizejs.com",
   "scripts": {
     "build": "tsc -p ./lib/tsconfig.release.json",
     "lint": "tslint -p ./lib",
@@ -54,7 +54,7 @@
     "@fabrix/fabrix": "^1.0.0-alpha.7",
     "@fabrix/lint": "^1.0.0-alpha.3",
     "@fabrix/spool-router": "^1.0.0-alpha.6",
-    "@fabrix/spool-tapestries": "^1.0.0-alpha.6",
+    "@fabrix/spool-tapestries": "^1.0.0-alpha.7",
     "@types/lodash": "^4.14.109",
     "@types/node": "~10.3.4",
     "@types/sequelize": "^4.27.23",
