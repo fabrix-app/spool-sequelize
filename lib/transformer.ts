@@ -34,6 +34,7 @@ export const Transformer = {
   },
 
   defineModel: (app: FabrixApp, model, connections) => {
+    const modelName = model.constructor.name
     const modelConfig = model.config
     const store = modelConfig.store || app.config.get('models.defaultStore')
     const connection = connections[store]
@@ -43,9 +44,7 @@ export const Transformer = {
     const options =  Transformer.getModelOptions(app, model)
     const schema = Transformer.getModelSchema(app, model)
 
-    // console.log('MODEL', model.name, schema)
-
-    const SequelizeModel = connection.define(model.name, schema, options)
+    const SequelizeModel = connection.define(modelName, schema, options)
     SequelizeModel.store = store
     SequelizeModel.migrate = migrate
 
@@ -57,7 +56,7 @@ export const Transformer = {
       SequelizeModel.prototype[i] = instanceMethods[i]
     })
 
-    connection.models[model.name] = SequelizeModel
+    connection.models[modelName] = SequelizeModel
 
     return SequelizeModel
   },

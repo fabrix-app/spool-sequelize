@@ -1,9 +1,26 @@
 /**
  * Spool Configuration
  *
- * @see {@link http://fabrixjs.io/doc/spool/config
+ * This manifest declares the application resources which are provided and/or
+ * modified by this spool.
+ * @see {@link https://fabrix.app/doc/spool/config
  */
 export const spool = {
+  provides: {
+    resources: [
+      'services'
+    ],
+    api: {
+      services: [
+        'SchemaMigrationService',
+        'TapestryService'
+      ]
+    },
+    config: [
+      'models',
+      'stores'
+    ]
+  },
   /**
    * Configure the lifecycle of this pack; that is, how it boots up, and which
    * order it loads relative to other spools.

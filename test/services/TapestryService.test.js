@@ -34,9 +34,9 @@ describe('api.services.TapestryService', () => {
       return TapestryService.create('User', {roles: [{name: 'roleTest'}]}, {populate: 'roles'})
         .catch(err => {
           assert.equal(err.code, 'E_VALIDATION')
-          assert.equal(err.message, 'notNull Violation: user.name cannot be null')
+          assert.equal(err.message, 'notNull Violation: User.name cannot be null')
           assert.equal(err.errors[0].path, 'name')
-          assert.equal(err.errors[0].message, 'user.name cannot be null')
+          assert.equal(err.errors[0].message, 'User.name cannot be null')
           assert.equal(err.errors[0].type, 'notNull Violation')
           assert.equal(err.name, 'Model error')
         })
@@ -188,7 +188,7 @@ describe('api.services.TapestryService', () => {
 
     it('should work for belongsToMany', () => {
       let projectId, userId
-      return TapestryService.create('project', {name: 'createassociationbelongstomanytest'})
+      return TapestryService.create('Project', {name: 'createassociationbelongstomanytest'})
         .then(project => {
           assert(project)
           assert(project.id)

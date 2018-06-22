@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-sequelize",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "Spool - Sequelize.js Spool http://sequelizejs.com",
   "scripts": {
     "build": "tsc -p ./lib/tsconfig.release.json",
@@ -51,10 +51,10 @@
     "sequelize": "^4.37.10"
   },
   "devDependencies": {
-    "@fabrix/fabrix": "^1.0.0-alpha.5",
+    "@fabrix/fabrix": "^1.0.0-alpha.7",
     "@fabrix/lint": "^1.0.0-alpha.3",
-    "@fabrix/spool-router": "^1.0.0-alpha.5",
-    "@fabrix/spool-tapestries": "^1.0.0-alpha.5",
+    "@fabrix/spool-router": "^1.0.0-alpha.6",
+    "@fabrix/spool-tapestries": "^1.0.0-alpha.6",
     "@types/lodash": "^4.14.109",
     "@types/node": "~10.3.4",
     "@types/sequelize": "^4.27.23",
@@ -70,8 +70,8 @@
     "typescript": "~2.8.1"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.0.0-alpha.5",
-    "@fabrix/spool-router": "^1.0.0-alpha.5"
+    "@fabrix/fabrix": "^1.0.0-alpha.7",
+    "@fabrix/spool-router": "^1.0.0-alpha.6"
   },
   "engines": {
     "node": ">= 7.6.0"
