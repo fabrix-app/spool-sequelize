@@ -1,10 +1,8 @@
-./test/index.js
-./test/**/*.test.js
 --reporter spec
 --recursive
 --full-trace
 --no-exit
---slow 50
 --check-leaks
---globals app
---fgrep app.js --invert
+--globals app,__core-js_shared__
+
+test/index.js test/**/*.test.js
