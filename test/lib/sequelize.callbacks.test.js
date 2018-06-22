@@ -17,7 +17,6 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
         beforeValidate: 0
       })
         .then(record => {
-          console.log('BROKE', record)
           assert.equal(record.beforeCreate, 1)
         })
     })

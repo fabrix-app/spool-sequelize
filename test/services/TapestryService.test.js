@@ -439,4 +439,12 @@ describe('api.services.TapestryService', () => {
         })
     })
   })
+  it('should work case insensitive', () => {
+    it('should insert a record', () => {
+      return TapestryService.create('role', {name: 'insensitive'})
+        .then(role => {
+          assert.equal(role.name, 'insensitive')
+        })
+    })
+  })
 })

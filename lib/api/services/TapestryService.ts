@@ -17,13 +17,16 @@ const manageError = err => {
 export class TapestryService extends Service {
 
   /**
-   * Internal method to retreive model object
-   * @param modelName name of the model to retreive
+   * Internal method to retrieve model object
+   * @param modelName name of the model to retrieve
    * @returns {*} sequelize model object
    * @private
    */
   _getModel(modelName) {
-    return this.app.models[modelName] || this.app.spools['sequelize'].models[modelName]
+    return this.app.models[modelName]
+      || this.app.spools['sequelize'].models[modelName]
+      || _.find(this.app.models, {tableName: modelName})
+      || _.find(this.app.spools['sequelize'].models, {tableName: modelName})
   }
 
   /**
