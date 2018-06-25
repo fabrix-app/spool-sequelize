@@ -4,9 +4,14 @@ jobs:
     working_directory: ~/fabrix
     docker:
       - image: circleci/node:10.0.0
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: ""
       - image: circleci/postgres:9.6.2-alpine
         environment:
           POSTGRES_DB: Sequelize
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: ""
     steps:
       - checkout
       - run:

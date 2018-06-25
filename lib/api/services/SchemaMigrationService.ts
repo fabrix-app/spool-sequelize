@@ -30,23 +30,23 @@ export class SchemaMigrationService extends Service {
     return model.sync()
   }
 
-  async migrateModels(models) {
-    return Promise.all(
-      Object.entries(models).map(([ _, model ]: [ any, {[key: string]: any}]) => {
-        if (model.migrate === 'drop') {
-          return this.dropModel(model)
-        }
-        else if (model.migrate === 'alter') {
-          return this.alterModel(model)
-        }
-        else if (model.migrate === 'none') {
-          return
-        }
-        else {
-          return
-        }
-      })
-    )
+  migrateModels(models) {
+    let promises = []
+    Object.entries(models).forEach(([ _, model ]: [ any, {[key: string]: any}]) => {
+      if (model.migrate === 'drop') {
+        promises.push(this.dropModel(model))
+      }
+      else if (model.migrate === 'alter') {
+        promises.push(this.alterModel(model))
+      }
+      else if (model.migrate === 'none') {
+        return
+      }
+      else {
+        return
+      }
+    })
+    return promises
   }
 
   /**
@@ -75,23 +75,28 @@ export class SchemaMigrationService extends Service {
     return connection.sync()
   }
 
+  /**
+   * Migrate the DB
+   * Checks the connection level instances first and the reverts to model level migration strategy
+   */
   async migrateDB(connections) {
-    const promises = []
-    return Promise.all(
-      Object.entries(connections).map(([ _, store ]: [ any, {[key: string]: any}]) => {
-        if (store.migrate === 'drop') {
-          return this.dropDB(store)
-        }
-        else if (store.migrate === 'alter') {
-          return this.alterDB(store)
-        }
-        else if (store.migrate === 'none') {
-          return
-        }
-        else {
-          return this.migrateModels(store.models)
-        }
-      })
-    )
+    let promises = []
+
+    Object.entries(connections).forEach(([ _, store ]: [ any, {[key: string]: any}]) => {
+      if (store.migrate === 'drop') {
+        promises.push(this.dropDB(store))
+      }
+      else if (store.migrate === 'alter') {
+        promises.push(this.alterDB(store))
+      }
+      else if (store.migrate === 'none') {
+        return
+      }
+      else {
+        promises = [...promises, ...this.migrateModels(store.models)]
+      }
+    })
+
+    return Promise.all(promises)
   }
 }

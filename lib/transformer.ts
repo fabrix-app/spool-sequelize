@@ -71,7 +71,12 @@ export const Transformer = {
       return new Sequelize(config.uri, Object.assign({}, config)) // Sequelize modify options object
     }
     else {
-      return new Sequelize(config.database, config.username, config.password, config)
+      return new Sequelize(
+        config.database,
+        config.username || process.env.POSTGRES_USER,
+        config.password || process.env.POSTGRES_PASSWORD,
+        config
+      )
     }
   },
 
@@ -116,6 +121,9 @@ export const Transformer = {
     return sequelize
   },
 
+  /**
+   * Transform sequelize connections for sequelize models
+   */
   getModels (app: FabrixApp, connections) {
     const models = Transformer.pickModels(app, connections)
     const sequelize = {}
@@ -126,6 +134,9 @@ export const Transformer = {
     return sequelize
   },
 
+  /**
+   * Call the associate method on configured models
+   */
   associateModels (app: FabrixApp, models) {
     Object.keys(models).forEach( modelName => {
       // Associate the models
@@ -134,5 +145,4 @@ export const Transformer = {
       }
     })
   }
-
 }

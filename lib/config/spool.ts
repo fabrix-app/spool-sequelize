@@ -18,6 +18,7 @@ export const spool = {
     },
     config: [
       'models',
+      'sequelize',
       'stores'
     ]
   },
