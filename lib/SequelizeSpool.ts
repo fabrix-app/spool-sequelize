@@ -38,9 +38,9 @@ export class SequelizeSpool extends DatastoreSpool {
   async validate() {
 
     const requiredSpools = ['router']
-    const spools = Object.keys(this.app.config.get('main.spools'))
+    const spools = Object.keys(this.app.spools)
 
-    if (requiredSpools.some(v => spools.indexOf(v) >= 0)) {
+    if (!spools.some(v => requiredSpools.indexOf(v) >= 0)) {
       return Promise.reject(new Error(`spool-sequelize requires spools: ${ requiredSpools.join(', ') }!`))
     }
 
