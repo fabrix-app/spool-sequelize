@@ -51,7 +51,7 @@
     "sequelize": "^4.37.10"
   },
   "devDependencies": {
-    "@fabrix/fabrix": "^1.0.0-alpha.7",
+    "@fabrix/fabrix": "^1.0.0-alpha.8",
     "@fabrix/lint": "^1.0.0-alpha.3",
     "@fabrix/spool-router": "^1.0.0-alpha.6",
     "@fabrix/spool-tapestries": "^1.0.0-alpha.7",
@@ -70,7 +70,7 @@
     "typescript": "~2.8.1"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.0.0-alpha.7",
+    "@fabrix/fabrix": "^1.0.0-alpha.8",
     "@fabrix/spool-router": "^1.0.0-alpha.6"
   },
   "engines": {

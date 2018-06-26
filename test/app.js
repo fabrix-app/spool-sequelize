@@ -94,7 +94,7 @@ const App = {
 
         static schema(app, Sequelize) {
           return {
-            name: Sequelize.STRING/*,
+            name: Sequelize.STRING /*,
              user: {
              model: 'User'
              }*/

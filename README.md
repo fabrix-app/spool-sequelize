@@ -1,16 +1,21 @@
 # spool-sequelize
+
+[![Gitter][gitter-image]][gitter-url]
+[![NPM version][npm-image]][npm-url]
+[![Build Status][ci-image]][ci-url]
+[![Test Coverage][coverage-image]][coverage-url]
+[![Dependency Status][daviddm-image]][daviddm-url]
+[![Follow @fabrix-app on Twitter][twitter-image]][twitter-url]
+
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/fabrix-app/spool-sequelize.svg?columns=all)](https://waffle.io/fabrix-app/spool-sequelize)
 
-[![NPM version][npm-image]][npm-url]
-[![Build status][ci-image]][ci-url]
-[![Dependency Status][daviddm-image]][daviddm-url]
-[![Code Climate][codeclimate-image]][codeclimate-url]
-
-## Sequelize for Proxy Engine
-Proxy Engine Sequelize.js Spool http://sequelizejs.com
-
 Loads Application Models (in `api/models`) into the Sequelize ORM; Integrates with [spool-router](https://github.com/fabrix-app/spool-router) to
-generate Footprints for routes.
+generate Tapestries for routes.
+
+## Install
+```sh
+$ npm install @fabrix/spool-sequelize --save
+```
 
 ## Usage
 Unlike other Fabrix ORMs, spool-sequelize does not need to use a resolver.  Instead, it will transfer your configured model into a sequelize one.
@@ -112,7 +117,7 @@ information on how our projects are organized and how to get started.
 
 [npm-image]: https://img.shields.io/npm/v/@fabrix/spool-sequelize.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/@fabrix/spool-sequelize
-[ci-image]: https://img.shields.io/circleci/project/github/fabrix-app/spool-sequelize/nmaster.svg
+[ci-image]: https://img.shields.io/circleci/project/github/fabrix-app/spool-sequelize/master.svg
 [ci-url]: https://circleci.com/gh/fabrix-app/spool-sequelize/tree/master
 [daviddm-image]: http://img.shields.io/david/fabrix-app/spool-sequelize.svg?style=flat-square
 [daviddm-url]: https://david-dm.org/fabrix-app/spool-sequelize
