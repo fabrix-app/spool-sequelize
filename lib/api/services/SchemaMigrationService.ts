@@ -7,15 +7,15 @@ export class SchemaMigrationService extends Service {
 
   /**
    * Drop collection
-   * @param model model object
    */
-  async dropModel(model) {
-    return model.sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
+  async dropModel(model, connection) {
+    const dialect = connection.dialect.connectionManager.dialectName
+    return model.sequelize.query(dialect === 'sqlite' ? 'PRAGMA foreign_keys = OFF' : 'SET FOREIGN_KEY_CHECKS = 0')
       .then(() => {
         return model.sync({force: true})
       })
       .then(() => {
-        return model.sequelize.query('SET FOREIGN_KEY_CHECKS = 1')
+        return model.sequelize.query(dialect === 'sqlite' ? 'PRAGMA foreign_keys = ON' : 'SET FOREIGN_KEY_CHECKS = 1')
       })
       .catch(err => {
         return model.sync({force: true})
@@ -24,20 +24,21 @@ export class SchemaMigrationService extends Service {
 
   /**
    * Alter an existing schema
-   * @param model model object
    */
-  async alterModel(model) {
+  async alterModel(model, connection) {
+    // const dialect = connection.dialect.connectionManager.dialectName
+    // return connection.sync(model)
     return model.sync()
   }
 
-  migrateModels(models) {
+  migrateModels(models, connection) {
     let promises = []
     Object.entries(models).forEach(([ _, model ]: [ any, {[key: string]: any}]) => {
       if (model.migrate === 'drop') {
-        promises.push(this.dropModel(model))
+        promises.push(this.dropModel(model, connection))
       }
       else if (model.migrate === 'alter') {
-        promises.push(this.alterModel(model))
+        promises.push(this.alterModel(model, connection))
       }
       else if (model.migrate === 'none') {
         return
@@ -69,7 +70,6 @@ export class SchemaMigrationService extends Service {
 
   /**
    * Alter an existing database
-   * @param connection connection object
    */
   async alterDB(connection) {
     return connection.sync()
@@ -93,7 +93,7 @@ export class SchemaMigrationService extends Service {
         return
       }
       else {
-        promises = [...promises, ...this.migrateModels(store.models)]
+        promises = [...promises, ...this.migrateModels(store.models, store)]
       }
     })
 

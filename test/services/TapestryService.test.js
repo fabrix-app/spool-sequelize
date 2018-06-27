@@ -7,6 +7,11 @@ describe('api.services.TapestryService', () => {
   before(() => {
     TapestryService = global.app.services.TapestryService
   })
+  describe('#sanity', () => {
+    it('should exists', () => {
+      assert(TapestryService)
+    })
+  })
   describe('#create', () => {
     it('should insert a record', () => {
       return TapestryService.create('Role', {name: 'createtest'})
