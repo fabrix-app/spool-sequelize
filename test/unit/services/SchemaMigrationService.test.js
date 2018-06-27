@@ -1,8 +1,8 @@
 'use strict'
-const lib = require('../../dist/index')
+const lib = require('../../../dist/index')
 const assert = require('assert')
 const FabrixApp = require('@fabrix/fabrix').FabrixApp
-const TestModel = require('../testmodel')
+const TestModel = require('../../testmodel')
 const App = {
   pkg: {
     name: 'spool-sequelize-test'
@@ -16,7 +16,7 @@ const App = {
     main: {
       spools: [
         require('@fabrix/spool-router').RouterSpool,
-        require('../../dist').SequelizeSpool // spool-sequelize
+        require('../../../dist/index').SequelizeSpool // spool-sequelize
       ]
     },
     stores: {

@@ -26,11 +26,11 @@ export class SequelizeSpool extends DatastoreSpool {
   }
 
   get models() {
-    return this._models
+    return this._models || {}
   }
 
   get connections () {
-    return this._connections
+    return this._connections || {}
   }
   /**
    * Validate the database config, and api.model definitions
@@ -56,22 +56,22 @@ export class SequelizeSpool extends DatastoreSpool {
   /**
    * Merge configuration into models, load Sequelize collections.
    */
-  configure() {
-
-  }
+  // configure() {
+  //
+  // }
 
   /**
    * Initialize Sequelize. This will compile the schema and connect to the
    * database.
    */
   async initialize() {
-    this._connections = Transformer.getConnections(this.app) || {}
-    this._models = Transformer.getModels(this.app, this._connections) || {}
+    this._connections = Transformer.getConnections(this.app)
+    this._models = Transformer.getModels(this.app, this.connections)
 
     // Replaces the app sequelize models with their sequelize versions
     // The originals are still in app.api.models
-    Object.keys(this._models).forEach( m => {
-      this.app.models[m] = this._models[m]
+    Object.keys(this.models).forEach( m => {
+      this.app.models[m] = this.models[m]
     })
 
     // Migrate the connections and/or models by their migration strategy
@@ -83,7 +83,7 @@ export class SequelizeSpool extends DatastoreSpool {
    */
   async unload() {
     return Promise.all(
-      Object.entries(this._connections).map(([ _, store ]) => store.close())
+      Object.entries(this.connections).map(([ _, store ]) => store.close())
     )
   }
 
@@ -92,6 +92,6 @@ export class SequelizeSpool extends DatastoreSpool {
    */
   async migrate() {
     const SchemaMigrationService = this.app.services.SchemaMigrationService as TSchemaMigrationService
-    return SchemaMigrationService.migrateDB(this._connections)
+    return SchemaMigrationService.migrateDB(this.connections)
   }
 }

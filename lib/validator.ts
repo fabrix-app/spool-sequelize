@@ -8,7 +8,6 @@ export const Validator = {
         if (err) {
           return reject(err)
         }
-
         return resolve(value)
       })
     })

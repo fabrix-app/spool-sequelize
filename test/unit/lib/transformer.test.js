@@ -1,33 +1,12 @@
 const assert = require('assert')
-const lib = require('../../dist/index')
+const lib = require('../../../dist/index')
 const FabrixApp = require('@fabrix/fabrix').FabrixApp
 
 describe('lib.Transformer', () => {
   let app
   beforeEach(() => {
-    app = new FabrixApp(require('../app'))
+    app = new FabrixApp(require('../../app'))
   })
-  // describe('#transformModels', () => {
-  //   it('should augment the models with identity and globalId', () => {
-  //     const models = lib.Transformer.transformModels(global.app)
-  //
-  //     assert(models.User)
-  //     assert.equal(models.User.identity, 'user')
-  //     assert.equal(models.User.globalId, 'User')
-  //     assert.equal(models.User.migrate, 'drop')
-  //
-  //     assert(models.Role)
-  //     assert.equal(models.Role.identity, 'role')
-  //     assert.equal(models.Role.globalId, 'Role')
-  //     assert.equal(models.Role.migrate, 'drop')
-  //   })
-  //   it('should correctly set the connection', () => {
-  //     const models = lib.Transformer.transformModels(global.app)
-  //
-  //     assert.equal(models.User.connection, 'teststore')
-  //     assert.equal(models.Role.connection, 'storeoverride')
-  //   })
-  // })
 
   describe('#getConnections', () => {
     it('should transform properly', () => {

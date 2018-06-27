@@ -11,6 +11,7 @@ export const Transformer = {
     if (!config.options) {
       config.options = {}
     }
+
     if (!config.options.tableName) {
       config.options.tableName = model.name.toLowerCase()
     }
