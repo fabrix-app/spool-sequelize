@@ -5,7 +5,7 @@
 [![Build Status][ci-image]][ci-url]
 [![Test Coverage][coverage-image]][coverage-url]
 [![Dependency Status][daviddm-image]][daviddm-url]
-[![Follow @fabrix-app on Twitter][twitter-image]][twitter-url]
+[![Follow @FabrixApp on Twitter][twitter-image]][twitter-url]
 
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/fabrix-app/spool-sequelize.svg?columns=all)](https://waffle.io/fabrix-app/spool-sequelize)
 
