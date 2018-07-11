@@ -23,10 +23,20 @@ export class TapestryService extends Service {
    * @private
    */
   _getModel(modelName) {
-    return this.app.models[modelName]
+     const model = this.app.models[modelName]
       || this.app.spools['sequelize'].models[modelName]
       || _.find(this.app.models, {tableName: modelName})
       || _.find(this.app.spools['sequelize'].models, {tableName: modelName})
+
+    if (model && model.resolver && model.resolver.sequelizeModel) {
+       return model.resolver.sequelizeModel
+    }
+    else if (model && model.sequelizeModel) {
+       return model.sequelizeModel
+    }
+    else {
+       return model
+    }
   }
 
   /**

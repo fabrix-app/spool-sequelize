@@ -3,8 +3,11 @@
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
 const testModel = require('./testmodel')
+const SequelizeResolver = require('../dist').SequelizeResolver
 
-require('@fabrix/fabrix')
+// require('@fabrix/fabrix')
+const Model = require('@fabrix/fabrix/dist/common').FabrixModel
+
 
 const App = {
   pkg: {
@@ -23,6 +26,10 @@ const App = {
           return {
             name: { type: Sequelize.STRING, allowNull: false}
           }
+        }
+
+        static get resolver () {
+          return SequelizeResolver
         }
 
         associate(models) {
@@ -44,6 +51,10 @@ const App = {
           }
         }
 
+        static get resolver () {
+          return SequelizeResolver
+        }
+
         associate(models) {
           models.Project.belongsToMany(models.User, {
             through: models.UserProject
@@ -58,6 +69,10 @@ const App = {
             status: Sequelize.STRING
           }
         }
+
+        static get resolver () {
+          return SequelizeResolver
+        }
       },
       User: class User extends Model {
         static config(app, Sequelize) {
@@ -68,10 +83,17 @@ const App = {
 
         static schema(app, Sequelize) {
           return {
-            name: { type: Sequelize.STRING, allowNull: false},
+            name: {
+              type: Sequelize.STRING,
+              allowNull: false
+            },
             password: Sequelize.STRING,
             displayName: Sequelize.STRING
           }
+        }
+
+        static get resolver () {
+          return SequelizeResolver
         }
 
         associate(models) {
@@ -94,11 +116,12 @@ const App = {
 
         static schema(app, Sequelize) {
           return {
-            name: Sequelize.STRING /*,
-             user: {
-             model: 'User'
-             }*/
+            name: 'string'
           }
+        }
+
+        static get resolver () {
+          return SequelizeResolver
         }
 
         associate(models) {
@@ -168,6 +191,10 @@ const App = {
             beforeValidate: Sequelize.INTEGER,
             afterValidate: Sequelize.INTEGER
           }
+        }
+
+        static get resolver () {
+          return SequelizeResolver
         }
       },
       testModel

@@ -1,4 +1,9 @@
-require('@fabrix/fabrix')
+const Model = require('@fabrix/fabrix/dist/common').FabrixModel
+const SequelizeResolver = require('../dist').SequelizeResolver
+
+const TestResolver = class TestResolver extends SequelizeResolver {
+
+}
 
 module.exports = Test = class Test extends Model {
   static config(app, Sequelize) {
@@ -11,6 +16,10 @@ module.exports = Test = class Test extends Model {
     return {
       name: {type: Sequelize.STRING, allowNull: false}
     }
+  }
+
+  static get resolver () {
+    return TestResolver
   }
 
   classLevelMethod() {
