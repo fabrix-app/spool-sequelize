@@ -32,7 +32,7 @@ const App = {
           return SequelizeResolver
         }
 
-        associate(models) {
+        static associate(models) {
           models.Page.belongsTo(models.User, {
             as: 'Owner'
           })
@@ -55,7 +55,7 @@ const App = {
           return SequelizeResolver
         }
 
-        associate(models) {
+        static associate(models) {
           models.Project.belongsToMany(models.User, {
             through: models.UserProject
           })
@@ -96,7 +96,7 @@ const App = {
           return SequelizeResolver
         }
 
-        associate(models) {
+        static associate(models) {
           models.User.hasMany(models.Role, {
             as: 'roles',
             onDelete: 'CASCADE',
@@ -124,7 +124,7 @@ const App = {
           return SequelizeResolver
         }
 
-        associate(models) {
+        static associate(models) {
           models.Role.belongsTo(models.User, {
             onDelete: 'CASCADE',
             foreignKey: {

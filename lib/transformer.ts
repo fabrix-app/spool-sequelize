@@ -269,8 +269,8 @@ export const Transformer = {
   associateModels (app: FabrixApp, models, sequelizeModels) {
     Object.keys(models).forEach( modelName => {
       // Associate the models
-      if (models[modelName].hasOwnProperty('associate')) {
-        models[modelName].associate(sequelizeModels)
+      if (models[modelName].constructor.hasOwnProperty('associate')) {
+        models[modelName].constructor.associate(sequelizeModels)
       }
       // Convenience link between model.associations and the sequelize.model.associations
       // models[modelName].associations = models[modelName].resolver.sequelizeModel.associations

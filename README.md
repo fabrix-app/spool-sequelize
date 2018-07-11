@@ -18,7 +18,7 @@ $ npm install @fabrix/spool-sequelize --save
 ```
 
 ## Usage
-Unlike other Fabrix ORMs, spool-sequelize does not need to use a resolver.  Instead, it will transfer your configured model into a sequelize one.
+Sequelize is a SQL orm and this spool uses that to add power to Fabrix models.
 
 ### Configure
 
@@ -65,7 +65,7 @@ export class User extends Model {
   }
   
   // If you need associations, put them here
-  associate(models) {
+  static associate(models) {
      // More information about associations here : http://docs.sequelizejs.com/en/latest/docs/associations/
      models.User.hasMany(models.Role, {
        as: 'roles',
@@ -82,7 +82,7 @@ export class User extends Model {
 
 ```js
 // api/services/UserService.js
-module.exports = class UserService extends Service {
+export class UserService extends Service {
   /**
    * Finds people with the given email.
    * @return Promise
@@ -101,6 +101,28 @@ module.exports = class UserService extends Service {
   }
 }
 ```
+
+## Resolvers 
+You can use the SequleizeResolver to add custom resolutions to your models.
+For example:
+```js
+import { SequelizeResolver } from '@fabrix/spool-sequelize'
+
+export class CustomerResolver extends SequelizeResolver {
+  findHappy(options = {}) {
+    this.findAll({ where: { happy: true} }, options)
+  }
+}
+```
+Now you can use it.
+```js
+User.findHappy()
+.then(happy => {
+  this.app.log.info('This many users are happy', happy.length)
+})
+```
+
+
 For more informations about sequelize queries, please look at [the official documentation](http://docs.sequelizejs.com/en/latest/docs/querying/)
 
 ## Tapestries query options
