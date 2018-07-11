@@ -37,8 +37,11 @@ A basic `config/store.js` can be found here : https://github.com/fabrix-app/spoo
 ### Models
 
 ```js
-module.exports = class User extends Model {
-  //More about supported schema here : http://docs.sequelizejs.com/en/latest/docs/models-definition/
+import { FabrixModel as Model } from '@fabrix/fabrix/dist/common'
+import { SequelizeResolver } from '@fabrix/spool-sequelize'
+
+export class User extends Model {
+  // More about supported schema here : http://docs.sequelizejs.com/en/latest/docs/models-definition/
   static schema (app, Sequelize) {
     return {
        name: { type: Sequelize.STRING, allowNull: false },
@@ -51,21 +54,26 @@ module.exports = class User extends Model {
     return {
        migrate: 'drop', //override default models configurations if needed
        store: 'sqlite', //override default models configurations if needed
-       //More informations about supported models options here : http://docs.sequelizejs.com/en/latest/docs/models-definition/#configuration
+       // More informations about supported models options here : http://docs.sequelizejs.com/en/latest/docs/models-definition/#configuration
        options: {}
      }
   }
   
+  // The Way this model interacts with Sequelize
+  static get resolver () {
+    return SequelizeResolver
+  }
+  
   // If you need associations, put them here
   associate(models) {
-   //More information about associations here : http://docs.sequelizejs.com/en/latest/docs/associations/
-   models.User.hasMany(models.Role, {
-     as: 'roles',
-     onDelete: 'CASCADE',
-     foreignKey: {
-       allowNull: true
-     }
-   })
+     // More information about associations here : http://docs.sequelizejs.com/en/latest/docs/associations/
+     models.User.hasMany(models.Role, {
+       as: 'roles',
+       onDelete: 'CASCADE',
+       foreignKey: {
+         allowNull: true
+       }
+     })
   }
 }
 ```

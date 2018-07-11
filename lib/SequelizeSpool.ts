@@ -14,6 +14,7 @@ import * as api  from './api/index'
 
 export class SequelizeSpool extends DatastoreSpool {
   _datastore = Sequelize
+
   private _connections: {[key: string]: any} = { }
   private _models: {[key: string]: any} = { }
 
@@ -65,15 +66,10 @@ export class SequelizeSpool extends DatastoreSpool {
    * database.
    */
   async initialize() {
+    // Holds a collection of the connections made through Sequelize
     this._connections = Transformer.getConnections(this.app)
+    // Holds a collection of the Sequelize models
     this._models = Transformer.getModels(this.app, this.connections)
-
-    // Replaces the app sequelize models with their sequelize versions
-    // The originals are still in app.api.models
-    Object.keys(this.models).forEach( m => {
-      this.app.models[m] = this.models[m]
-    })
-
     // Migrate the connections and/or models by their migration strategy
     return this.migrate()
   }
