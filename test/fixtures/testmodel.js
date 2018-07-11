@@ -1,5 +1,5 @@
 const Model = require('@fabrix/fabrix/dist/common').FabrixModel
-const SequelizeResolver = require('../dist').SequelizeResolver
+const SequelizeResolver = require('../../dist/index').SequelizeResolver
 
 const TestResolver = class TestResolver extends SequelizeResolver {
 

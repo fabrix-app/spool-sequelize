@@ -166,15 +166,15 @@ export class SequelizeResolver extends FabrixResolver {
     }
   }
 
-  findOrBuild(criteria, defaults, options = { }) {
+  findOrBuild(criteria) {
     if (this._sequelizeModel) {
-      return this._sequelizeModel.findOrBuild(criteria, defaults, options)
+      return this._sequelizeModel.findOrBuild(criteria)
     }
   }
 
-  findOrCreate(criteria, defaults, options = { }) {
+  findOrCreate(criteria) {
     if (this._sequelizeModel) {
-      return this._sequelizeModel.findOrCreate(criteria, defaults, options)
+      return this._sequelizeModel.findOrCreate(criteria)
     }
   }
 

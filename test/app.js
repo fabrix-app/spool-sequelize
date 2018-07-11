@@ -2,7 +2,7 @@
 
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
-const testModel = require('./testmodel')
+const testModel = require('./fixtures/testmodel')
 const SequelizeResolver = require('../dist').SequelizeResolver
 
 // require('@fabrix/fabrix')

@@ -2,7 +2,7 @@
 const lib = require('../../../dist/index')
 const assert = require('assert')
 const FabrixApp = require('@fabrix/fabrix').FabrixApp
-const TestModel = require('../../testmodel')
+const TestModel = require('../../fixtures/testmodel')
 const App = {
   pkg: {
     name: 'spool-sequelize-test'
