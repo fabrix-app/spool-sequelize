@@ -7,6 +7,9 @@ import { pickBy, isString, startsWith } from 'lodash'
 export const Transformer = {
   BreakException: {},
 
+  /**
+   * Reserved Methods that the model shouldn't inherit from the resolver
+   */
   reservedMethods: [
     '_app',
     '_datastore',
@@ -23,8 +26,11 @@ export const Transformer = {
     'models',
     'connect'
   ],
-  // Supplied by Model vs Recognized by Sequelize
-  // Generally Fabrix ORMS support: string, int, date
+
+  /**
+   * Supplied by Model vs Recognized by Sequelize
+   * Generally Fabrix ORMS support: string, int, date
+   */
   dataTypes: {
     '^(STRING|string)': 'STRING',
     '^(STRING|string)\((\w*)\)': 'STRING($2)',
@@ -107,6 +113,24 @@ export const Transformer = {
     return schema
   },
 
+  replaceDataType: (dataType) => {
+    let transformed
+    try {
+      Object.keys(Transformer.dataTypes).forEach(type => {
+        const exp = new RegExp(type)
+        if (exp.test(dataType)) {
+          transformed = Sequelize[dataType.replace(exp, Transformer.dataTypes[type])]
+          throw Transformer.BreakException
+        }
+      })
+    }
+    catch (e) {
+      if (e !== Transformer.BreakException) {
+        throw e
+      }
+    }
+    return transformed
+  },
   /**
    * Transforms Schema to Sequelize method if defined as a string
    * Common from Spools built for waterline
@@ -115,21 +139,16 @@ export const Transformer = {
     const transformed: {[key: string]: any } = {}
     Object.keys(schema).forEach(s => {
       if (typeof schema[s] === 'string') {
-        try {
-          Object.keys(Transformer.dataTypes).forEach(type => {
-            const exp = new RegExp(type)
-            if (exp.test(schema[s])) {
-              transformed[s] = Sequelize[schema[s].replace(exp, Transformer.dataTypes[type])]
-              throw Transformer.BreakException
-            }
-          })
-        }
-        catch (e) {
-          if (e !== Transformer.BreakException) {
-            throw e
-          }
-        }
+        transformed[s] = Transformer.replaceDataType(schema[s])
       }
+      // else if (
+      //   typeof schema[s] === 'object'
+      //   && schema[s].hasOwnProperty('type')
+      //   && typeof schema[s].type === 'string'
+      // ) {
+      //   schema[s].type = Transformer.replaceDataType(schema[s].type)
+      //   transformed[s] = schema[s]
+      // }
       else {
         transformed[s] = schema[s]
       }
@@ -160,15 +179,9 @@ export const Transformer = {
     const store = modelConfig.store || app.config.get('models.defaultStore')
     const connection = connections[store]
     const migrate = modelConfig.migrate || app.config.get('models.migrate') || connection.migrate
-    // const instanceMethods = Transformer.getModelPrototypes(model)
-    // const classMethods = Transformer.getModelMethods(model, instanceMethods)
     const options =  Transformer.getModelOptions(app, model)
     const schema = Transformer.getModelSchema(app, model)
 
-    // const SequelizeModel = connection.define(modelName, schema, options)
-    // model.resolver.store = store
-    // model.resolver.migrate = migrate
-    // console.log('BROKE BEFORE', typeof model.resolver.create)
     model.store = store
     model.migrate = migrate
     model.resolver.connection = connection
@@ -259,7 +272,8 @@ export const Transformer = {
       if (models[modelName].hasOwnProperty('associate')) {
         models[modelName].associate(sequelizeModels)
       }
-      models[modelName].associations = models[modelName].resolver.sequelizeModel.associations
+      // Convenience link between model.associations and the sequelize.model.associations
+      // models[modelName].associations = models[modelName].resolver.sequelizeModel.associations
     })
   }
 }

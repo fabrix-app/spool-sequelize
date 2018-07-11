@@ -57,19 +57,18 @@ export class SequelizeSpool extends DatastoreSpool {
   /**
    * Merge configuration into models, load Sequelize collections.
    */
-  // configure() {
-  //
-  // }
+  configure() {
+    // Holds a collection of the connections made through Sequelize
+    this._connections = Transformer.getConnections(this.app)
+    // Holds a collection of the Sequelize models
+    this._models = Transformer.getModels(this.app, this.connections)
+  }
 
   /**
    * Initialize Sequelize. This will compile the schema and connect to the
    * database.
    */
   async initialize() {
-    // Holds a collection of the connections made through Sequelize
-    this._connections = Transformer.getConnections(this.app)
-    // Holds a collection of the Sequelize models
-    this._models = Transformer.getModels(this.app, this.connections)
     // Migrate the connections and/or models by their migration strategy
     return this.migrate()
   }
