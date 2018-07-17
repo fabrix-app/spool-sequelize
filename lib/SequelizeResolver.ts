@@ -27,6 +27,7 @@ export class SequelizeResolver extends FabrixResolver {
 
   public connect(modelName, schema, options) {
     this._sequelizeModel = this._connection.define(modelName, schema, options)
+    this._sequelizeModel.app = this.app
 
     const instanceMethods = Transformer.getModelPrototypes(this.model)
     const classMethods = Transformer.getModelMethods(this.model, instanceMethods)

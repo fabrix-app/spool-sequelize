@@ -1,6 +1,8 @@
 # spool-sequelize
 :package: Sequelize.js Spool http://sequelizejs.com
 
+## v1.0.4
+Resolvers are now in effect
 
 ## v0.1.0
 Now models definition have 2 arguments, first the fabrix app and second Sequelize module
