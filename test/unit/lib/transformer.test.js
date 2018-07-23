@@ -5,7 +5,7 @@ const FabrixApp = require('@fabrix/fabrix').FabrixApp
 describe('lib.Transformer', () => {
   let app
   beforeEach(() => {
-    app = new FabrixApp(require('../../app'))
+    app = new FabrixApp(require('../../fixtures/app'))
   })
 
   describe('#getConnections', () => {

@@ -1,5 +1,5 @@
 const assert = require('assert')
-const app = require('../../app')
+const app = require('../../fixtures/app')
 const lib = require('../../../dist/index')
 
 describe('lib.Validator', () => {
