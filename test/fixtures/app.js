@@ -2,12 +2,10 @@
 
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
-const testModel = require('./fixtures/testmodel')
-const SequelizeResolver = require('../dist').SequelizeResolver
+const testModel = require('./testmodel')
+const SequelizeResolver = require('../../dist/index').SequelizeResolver
 
-// require('@fabrix/fabrix')
 const Model = require('@fabrix/fabrix/dist/common').FabrixModel
-
 
 const App = {
   pkg: {
@@ -205,7 +203,7 @@ const App = {
       spools: [
         require('@fabrix/spool-router').RouterSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,
-        require('../dist').SequelizeSpool // spool-sequelize
+        require('../../dist/index').SequelizeSpool // spool-sequelize
       ]
     },
     stores: {

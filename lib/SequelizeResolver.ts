@@ -4,6 +4,7 @@ import { Transformer } from './transformer'
 
 export class SequelizeResolver extends FabrixResolver {
   private _connection
+  private _sequelize
   private _sequelizeModel
 
   constructor (model: FabrixModel, datastore?: Sequelize) {
@@ -11,6 +12,7 @@ export class SequelizeResolver extends FabrixResolver {
     if (!model) {
       throw new RangeError('Resolver must be given a Model to bind to')
     }
+    this._sequelize = datastore
   }
 
   get connection() {
@@ -23,6 +25,10 @@ export class SequelizeResolver extends FabrixResolver {
 
   get sequelizeModel() {
     return this._sequelizeModel
+  }
+
+  get sequelize() {
+    return this._sequelize
   }
 
   public connect(modelName, schema, options) {

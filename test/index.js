@@ -3,7 +3,7 @@
 const FabrixApp = require('@fabrix/fabrix').FabrixApp
 
 before(() => {
-  global.app = new FabrixApp(require('./app'))
+  global.app = new FabrixApp(require('./fixtures/app'))
   return global.app.start().catch(global.app.stop)
 })
 
