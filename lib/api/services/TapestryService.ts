@@ -1,5 +1,5 @@
 import { FabrixService as Service } from '@fabrix/fabrix/dist/common'
-import * as _ from 'lodash'
+import { isPlainObject, isArray, find, defaultsDeep, extend, defaults } from 'lodash'
 import { ModelError } from '../../errors'
 
 const manageError = err => {
@@ -25,8 +25,8 @@ export class TapestryService extends Service {
   _getModel(modelName) {
      const model = this.app.models[modelName]
       || this.app.spools['sequelize'].models[modelName]
-      || _.find(this.app.models, {tableName: modelName})
-      || _.find(this.app.spools['sequelize'].models, {tableName: modelName})
+      || find(this.app.models, {tableName: modelName})
+      || find(this.app.spools['sequelize'].models, {tableName: modelName})
 
     if (model && model.resolver && model.resolver.sequelizeModel) {
        return model.resolver.sequelizeModel
@@ -50,7 +50,7 @@ export class TapestryService extends Service {
    */
   create(modelName, values, options) {
     const Model = this._getModel(modelName)
-    const modelOptions = _.defaultsDeep({}, options, this.app.config.get('tapestries.models.options'))
+    const modelOptions = defaultsDeep({}, options, this.app.config.get('tapestries.models.options'))
     if (!Model) {
       return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
     }
@@ -64,12 +64,12 @@ export class TapestryService extends Service {
     if (populate === true || populate === 'all') {
       return {all: true}
     }
-    if (_.isPlainObject(populate) || _.isArray(populate)) {
+    if (isPlainObject(populate) || isArray(populate)) {
       return populate
     }
 
     const fields = populate.split(',')
-    const includes = []
+    const includes = [ ]
 
     fields.forEach((value, key) => {
       includes.push(model.associations[value])
@@ -89,7 +89,7 @@ export class TapestryService extends Service {
    */
   find(modelName, criteria, options) {
     const Model = this._getModel(modelName)
-    const modelOptions = _.defaultsDeep({}, options, this.app.config.get('tapestries.models.options'))
+    const modelOptions = defaultsDeep({}, options, this.app.config.get('tapestries.models.options'))
     let query
     if (!Model) {
       return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
@@ -99,16 +99,16 @@ export class TapestryService extends Service {
     }
     delete modelOptions.populate
 
-    if (!_.isPlainObject(criteria) || modelOptions.findOne === true) {
+    if (!isPlainObject(criteria) || modelOptions.findOne === true) {
       if (modelOptions.findOne === true) {
         if (!criteria.where) {
           criteria = {where: criteria}
         }
 
-        query = Model.find(_.defaults(criteria, modelOptions))
+        query = Model.find(defaults(criteria, modelOptions))
       }
       else {
-        query = Model.find(_.defaults({
+        query = Model.find(defaults({
           where: {
             [Model.primaryKeyAttribute]: criteria
           }
@@ -123,7 +123,7 @@ export class TapestryService extends Service {
         criteria.order = modelOptions.sort
         delete modelOptions.sort
       }
-      query = Model.findAll(_.defaults(criteria, modelOptions))
+      query = Model.findAll(defaults(criteria, modelOptions))
     }
 
     return query.catch(manageError)
@@ -151,16 +151,16 @@ export class TapestryService extends Service {
       criteria = {}
     }
 
-    if (_.isArray(options.populate) || _.isPlainObject(options.populate)) {
+    if (isArray(options.populate) || isPlainObject(options.populate)) {
       options.include = options.populate
       delete options.populate
     }
 
-    if (_.isPlainObject(criteria)) {
+    if (isPlainObject(criteria)) {
       if (!criteria.where) {
         criteria = {where: criteria}
       }
-      query = Model.update(values, _.extend(criteria, options))
+      query = Model.update(values, extend(criteria, options))
     }
     else {
       criteria = {
@@ -169,7 +169,7 @@ export class TapestryService extends Service {
         }
       }
 
-      query = Model.update(values, _.extend(criteria, options))
+      query = Model.update(values, extend(criteria, options))
     }
 
     return query.catch(manageError)
@@ -190,20 +190,20 @@ export class TapestryService extends Service {
       return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
     }
 
-    if (_.isArray(options.populate) || _.isPlainObject(options.populate)) {
+    if (isArray(options.populate) || isPlainObject(options.populate)) {
       options.include = options.populate
       delete options.populate
     }
 
-    if (_.isPlainObject(criteria)) {
+    if (isPlainObject(criteria)) {
       if (!criteria.where) {
         criteria = {where: criteria}
       }
-      if (_.isArray(options.populate) || _.isPlainObject(options.populate)) {
+      if (isArray(options.populate) || isPlainObject(options.populate)) {
         criteria.include = options.populate
         delete options.populate
       }
-      query = Model.destroy(_.extend(criteria, options))
+      query = Model.destroy(extend(criteria, options))
     }
     else {
       criteria = {
@@ -211,7 +211,7 @@ export class TapestryService extends Service {
           [Model.primaryKeyAttribute]: criteria
         }
       }
-      query = Model.destroy(_.extend(criteria, options)).then(results => results[0])
+      query = Model.destroy(extend(criteria, options)).then(results => results[0])
     }
 
     return query.catch(manageError)
@@ -300,7 +300,7 @@ export class TapestryService extends Service {
       if (!criteria) {
         criteria = {}
       }
-      else if (!_.isPlainObject(criteria)) {
+      else if (!isPlainObject(criteria)) {
         criteria = {
           [childModel.primaryKeyAttribute]: criteria
         }
@@ -315,7 +315,7 @@ export class TapestryService extends Service {
     else if (association.throughModel) {
       // Get all through tables with the parent
       return this._getThroughModelAssociation(association, parentId)
-        .then(ids => childModel.findAll(_.extend({
+        .then(ids => childModel.findAll(extend({
           where: {
             $and: [
               criteria || {},
@@ -371,7 +371,7 @@ export class TapestryService extends Service {
       if (!criteria) {
         criteria = {}
       }
-      else if (!_.isPlainObject(criteria)) {
+      else if (!isPlainObject(criteria)) {
         criteria = {
           [childModel.primaryKeyAttribute]: criteria
         }
@@ -384,7 +384,7 @@ export class TapestryService extends Service {
     else if (association.throughModel) {
       // Get all through tables with the parent
       return this._getThroughModelAssociation(association, parentId)
-        .then(ids => childModel.update(values, _.extend({
+        .then(ids => childModel.update(values, extend({
           where: {
             $and: [
               criteria || {},

@@ -21,6 +21,16 @@ describe('Spool', () => {
       })
   })
 
+  it('should be able to access the datastore service', (done) => {
+    assert(global.app.models.testModel.resolver.datastore)
+    assert(global.app.models.testModel.resolver.sequelize)
+    assert(global.app.models.testModel.datastore)
+    assert(global.app.models.testModel.sequelize)
+    assert.equal(global.app.models.testModel.sequelize, global.app.models.testModel.resolver.sequelize)
+    assert.equal(global.app.models.testModel.instance, global.app.models.testModel.resolver.sequelizeModel)
+    done()
+  })
+
   it('should access a classLevelMethod', (done) => {
     assert.equal(global.app.models.testModel.classLevelMethod(), 'foo')
     assert.equal(global.app.models.testModel.resolver._sequelizeModel.classLevelMethod(), 'foo')
