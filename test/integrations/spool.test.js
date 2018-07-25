@@ -26,6 +26,8 @@ describe('Spool', () => {
     assert(global.app.models.testModel.resolver.sequelize)
     assert(global.app.models.testModel.datastore)
     assert(global.app.models.testModel.sequelize)
+    assert.equal(global.app.models.testModel.sequelize, global.app.models.testModel.resolver.sequelize)
+    assert.equal(global.app.models.testModel.instance, global.app.models.testModel.resolver.sequelizeModel)
     done()
   })
 

@@ -39,6 +39,10 @@ export class SequelizeResolver extends FabrixResolver {
     return this._sequelize
   }
 
+  get instance() {
+    return this._sequelizeModel
+  }
+
   public connect(modelName, schema, options) {
     this._sequelizeModel = this._connection.define(modelName, schema, options)
     this._sequelizeModel.app = this.app

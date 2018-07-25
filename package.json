@@ -52,7 +52,7 @@
     "sequelize": "^4.37.10"
   },
   "devDependencies": {
-    "@fabrix/fabrix": "^1.1.2",
+    "@fabrix/fabrix": "^1.1.3",
     "@fabrix/lint": "^1.0.0-alpha.3",
     "@fabrix/spool-router": "^1.1.3",
     "@fabrix/spool-tapestries": "^1.1.3",
@@ -70,7 +70,7 @@
     "typescript": "~2.8.1"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.1.2",
+    "@fabrix/fabrix": "^1.1.3",
     "@fabrix/spool-router": "^1.1.3"
   },
   "engines": {
