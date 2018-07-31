@@ -3,6 +3,7 @@ import * as Sequelize from 'sequelize'
 import { FabrixApp } from '@fabrix/fabrix'
 import { FabrixModel } from '@fabrix/fabrix/dist/common'
 import { pickBy, isString, startsWith } from 'lodash'
+import { SequelizeResolver } from './SequelizeResolver'
 
 export const Transformer = {
   BreakException: {},
@@ -181,6 +182,13 @@ export const Transformer = {
     const migrate = modelConfig.migrate || app.config.get('models.migrate') || connection.migrate
     const options =  Transformer.getModelOptions(app, model)
     const schema = Transformer.getModelSchema(app, model)
+
+    if (!model.resolver || !model.resolver.connect) {
+      throw new Error(`${modelName} was set to use Sequelize but the resolver is missing "connect"`)
+    }
+    if (!(model.resolver instanceof SequelizeResolver)) {
+      throw new Error(`${modelName} is not a Sequelize Resolver`)
+    }
 
     model.store = store
     model.migrate = migrate
