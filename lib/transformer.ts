@@ -182,6 +182,10 @@ export const Transformer = {
     const options =  Transformer.getModelOptions(app, model)
     const schema = Transformer.getModelSchema(app, model)
 
+    if (!model.resolver || !model.resolver.connect) {
+      throw new Error(`${modelName} was set to use Sequelize but the resolver is missing "connect"`)
+    }
+
     model.store = store
     model.migrate = migrate
     model.resolver.connection = connection
