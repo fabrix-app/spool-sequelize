@@ -44,12 +44,16 @@ export class SequelizeResolver extends FabrixResolver {
   }
 
   public connect(modelName, schema, options) {
+    // Define the Sequelize Connection on the provided connection
     this._sequelizeModel = this._connection.define(modelName, schema, options)
+    // Add a copy of the Fabrix app to the connection model
     this._sequelizeModel.app = this.app
 
+    // A helpful exposure of the instance of Sequelize being used
     this._sequelize = this._sequelizeModel.sequelize
     this.model.datastore = this.model['sequelize'] = this.datastore
 
+    // Get the instance methods
     const instanceMethods = Transformer.getModelPrototypes(this.model)
     const classMethods = Transformer.getModelMethods(this.model, instanceMethods)
 
@@ -63,10 +67,13 @@ export class SequelizeResolver extends FabrixResolver {
       this._sequelizeModel.prototype[i] = instanceMethods[i]
     })
 
+    // Attach Fabrix to the instance prototype
+    this._sequelizeModel.prototype.app = this.app
+
     // Add this model to the connection.models for use later
     this._connection.models[modelName] = this._sequelizeModel
 
-    // Bind the new methods to the models
+    // Bind the new methods to the Fabrix model
     const resolverMethods = Transformer.getClassMethods(this)
     Object.entries(resolverMethods).forEach(([ _, method]: [any, string])  => {
       this.model[method] = this[method].bind(this)
