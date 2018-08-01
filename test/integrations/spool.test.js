@@ -1,6 +1,7 @@
 'use strict'
 
 const assert = require('assert')
+const Transformer = require('../../dist/transformer').Transformer
 
 describe('Spool', () => {
   let spool
@@ -40,7 +41,8 @@ describe('Spool', () => {
   it('should access a instanceLevelMethod', (done) => {
     const instance = global.app.models.testModel.build({name: 'test'})
     assert.equal(instance.instanceLevelMethod(), 'bar')
-    // assert.ok(instance.app)
+    assert.ok(instance.app)
+    assert.ok(instance.app.config.get('main'))
     done()
   })
 
