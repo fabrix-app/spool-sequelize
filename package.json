@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-sequelize",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Spool - Datastore Spool for Sequelize.js http://sequelizejs.com",
   "scripts": {
     "build": "tsc -p ./lib/tsconfig.release.json",
