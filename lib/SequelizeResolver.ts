@@ -237,9 +237,9 @@ export class SequelizeResolver extends FabrixResolver {
   /**
    *
    */
-  findOne(criteria, options = { }) {
+  findOne(criteria) {
     if (this._sequelizeModel) {
-      return this._sequelizeModel.findOne(criteria, options)
+      return this._sequelizeModel.findOne(criteria)
     }
   }
 
