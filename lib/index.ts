@@ -5,4 +5,5 @@ export { SequelizeResolver } from './SequelizeResolver'
 export { Transformer } from './transformer'
 export { Validator } from './validator'
 export { Schemas } from './schemas'
+export { Utils } from './utils'
 export { Errors }
