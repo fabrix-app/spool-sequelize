@@ -145,4 +145,18 @@ describe('Spool', () => {
     const instance = global.app.models.testModel.getTableName()
     done()
   })
+
+  describe('Model Extending', () => {
+    it('should create an instance of an extended model', (done) => {
+      const instance = global.app.models.testModel2.create({name: 'test', name2: 'test'})
+        .then(i => {
+          assert.equal(i.name, 'test')
+          assert.equal(i.name2, 'test')
+          done()
+        })
+        .catch(err => {
+          done(err)
+        })
+    })
+  })
 })
