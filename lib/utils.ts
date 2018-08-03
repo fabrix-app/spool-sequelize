@@ -5,7 +5,7 @@ export const Utils = {
       return [...objValue, ...srcValue]
     }
   },
-  mergeConfig: (...values) => {
+  mergeConfig: (...values): {[key: string]: any} => {
     const config = {}
     values.forEach(val => {
       return mergeWith(config, val, Utils.mergeConfigUtil)
