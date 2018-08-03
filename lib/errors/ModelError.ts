@@ -14,6 +14,10 @@ export class ModelError extends Error {
         this.statusCode = '404'
         break
       }
+      case 'E_FORBIDDEN': {
+        this.statusCode = '403'
+        break
+      }
       case 'E_BAD_REQUEST': {
         this.statusCode = '400'
         break
