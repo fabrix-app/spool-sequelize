@@ -132,9 +132,9 @@ export class SequelizeResolver extends FabrixResolver {
   /**
    *
    */
-  build(options = { }) {
+  build(dataValues, options = { }) {
     if (this._sequelizeModel) {
-      return this._sequelizeModel.build(options)
+      return this._sequelizeModel.build(dataValues, options)
     }
   }
 
@@ -173,6 +173,10 @@ export class SequelizeResolver extends FabrixResolver {
       return this._sequelizeModel.decrement(fields, options)
     }
   }
+
+  /**
+   *
+   */
   describe(schema, options = { }) {
     if (this._sequelizeModel) {
       return this._sequelizeModel.describe(schema, options)

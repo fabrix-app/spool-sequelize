@@ -56,6 +56,64 @@ describe('Spool', () => {
       })
   })
 
+  it('should build and save an instance with associations', (done) => {
+    const instance = global.app.models.User.build({
+      name: 'test',
+      roles: [
+        {
+          name: 'test'
+        }
+      ]
+    }, {
+      include: [
+        {
+          model: global.app.models.Role.instance,
+          as: 'roles'
+        }
+      ]
+    })
+    instance.save().then(i => {
+      assert.ok(i.roles)
+      assert.equal(i.roles.length, 1)
+      done()
+    })
+      .catch(err => {
+        done(err)
+      })
+  })
+
+
+  it('should build, save, reload an instance with associations', (done) => {
+    const instance = global.app.models.User.build({
+      name: 'test',
+      roles: [
+        {
+          name: 'test'
+        }
+      ]
+    }, {
+      include: [
+        {
+          model: global.app.models.Role.instance,
+          as: 'roles'
+        }
+      ]
+    })
+    instance.save().then(i => {
+      assert.ok(i.roles)
+      assert.equal(i.roles.length, 1)
+      return i.reload()
+    })
+      .then(i => {
+        assert.ok(i.roles)
+        assert.equal(i.roles.length, 1)
+        done()
+      })
+      .catch(err => {
+        done(err)
+      })
+  })
+
   it('should create an instance', (done) => {
     const instance = global.app.models.testModel.create({name: 'test'})
       .then(i => {
