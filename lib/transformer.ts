@@ -203,16 +203,20 @@ export const Transformer = {
    * @param  {Object} app.config.store
    * @return {Sequelize} Sequelize instance
    */
-  createConnectionsFromConfig (config: {[key: string]: any}) {
+  createConnectionsFromConfig (app: FabrixApp, config: {[key: string]: any}) {
+    const logger = function(str) {
+      app.log.debug(str)
+    }
     if (config.uri) {
-      return new Sequelize(config.uri, Object.assign({}, config)) // Sequelize modify options object
+      // Sequelize modify options object
+      return new Sequelize(config.uri, Object.assign({},  config, { logging: logger }))
     }
     else {
       return new Sequelize(
         config.database,
         config.username || process.env.POSTGRES_USER,
         config.password || process.env.POSTGRES_PASSWORD,
-        config
+        Object.assign({}, config, { logging: logger })
       )
     }
   },
@@ -249,7 +253,7 @@ export const Transformer = {
     const stores = Transformer.pickStores(app.config.get('stores'))
     const sequelize = {}
     Object.keys(stores).forEach(key => {
-      sequelize[key] = Transformer.createConnectionsFromConfig(stores[key])
+      sequelize[key] = Transformer.createConnectionsFromConfig(app, stores[key])
       sequelize[key].fabrixApp = app
       sequelize[key].migrate = stores[key].migrate
       sequelize[key].models = {}
