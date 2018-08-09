@@ -209,14 +209,14 @@ export const Transformer = {
     }
     if (config.uri) {
       // Sequelize modify options object
-      return new Sequelize(config.uri, Object.assign({},  config, { logging: logger }))
+      return new Sequelize(config.uri, Object.assign({}, { logging: logger }, config))
     }
     else {
       return new Sequelize(
         config.database,
         config.username || process.env.POSTGRES_USER,
         config.password || process.env.POSTGRES_PASSWORD,
-        Object.assign({}, config, { logging: logger })
+        Object.assign({}, { logging: logger }, config)
       )
     }
   },
