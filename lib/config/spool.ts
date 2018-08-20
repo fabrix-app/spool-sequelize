@@ -3,7 +3,7 @@
  *
  * This manifest declares the application resources which are provided and/or
  * modified by this spool.
- * @see {@link https://fabrix.app/doc/spool/config
+ * @see {@link https://fabrix.app/docs/spool/config
  */
 export const spool = {
   provides: {
