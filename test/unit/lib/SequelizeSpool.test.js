@@ -3,14 +3,13 @@ const lib = require('../../../dist/index')
 const assert = require('assert')
 const FabrixApp = require('@fabrix/fabrix').FabrixApp
 const SequelizeSpool = require('../../../dist/index').SequelizeSpool
+const RouterSpool = require('@fabrix/spool-router').RouterSpool
 
 describe('app.spools.SequelizeSpool', () => {
   let app
-  beforeEach(() => {
-    app = new FabrixApp({pkg: {}, config: {}, api: {}})
-  })
   describe('#validate', () => {
     it('should validate that a router is not present', (done) => {
+      app = new FabrixApp({pkg: {}, config: {}, api: {}})
       const spool = new SequelizeSpool(app, {})
 
       spool.validate()
@@ -23,8 +22,14 @@ describe('app.spools.SequelizeSpool', () => {
         })
     })
     it('should log that models will be ignored', (done) => {
-      // hack this attribute so we can run this
-      app._spools = {router: {}}
+      app = new FabrixApp({pkg: {}, config: {
+        main: {
+          spools: [
+            RouterSpool
+          ]
+        }
+      }, api: {}})
+
       app.config.immutable = false
       app.config.set('stores', {})
       const spool = new SequelizeSpool(app, {})
