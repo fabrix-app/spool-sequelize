@@ -1,10 +1,10 @@
 /**
- * Database Configuration
- * (app.config.database)
+ * Database Stores Configuration
+ * (app.config.stores)
  *
- * Configure the ORM layer, connections, etc.
+ * Configure the ORM layers, connections, etc.
  *
- * @see {@link http://fabrixjs.io/doc/config/stores}
+ * @see {@link https://fabrix.app/docs/config/stores}
  */
 export const stores = {
 
