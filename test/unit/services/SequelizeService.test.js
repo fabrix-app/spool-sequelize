@@ -91,4 +91,38 @@ describe('api.services.SequelizeService', () => {
     assert.equal(newOptions.hello, 'world')
     done()
   })
+  it('should replace model with association that match', (done) => {
+    const name = 'hello';
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{ model: {name} }]
+    }, {
+        include: [{ associate: {source: {name} }}
+      ]
+    })
+    assert.equal(newOptions.include.length, 1)
+    assert.equal(newOptions.include[0].associate.source.name, 'hello')
+    done()
+  })
+  it('should replace association with model that match', (done) => {
+    const name = 'hello';
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{ associate: {source: {name}} }]
+    }, {
+        include: [{ model: {name} }]
+    })
+    assert.equal(newOptions.include.length, 1)
+    assert.equal(newOptions.include[0].model.name, 'hello')
+    done()
+  })
+  it('should merge includes when one uses model and another uses associate include formats', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{associate: {source: {name: 'hello'}} }]
+    }, {
+      include: [{ model: {name: 'world'} }]
+    })
+    assert.equal(newOptions.include.length, 2)
+    assert.equal(newOptions.include[0].associate.source.name, 'hello')
+    assert.equal(newOptions.include[1].model.name, 'world')
+    done()
+  })
 })

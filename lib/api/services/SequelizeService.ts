@@ -55,8 +55,15 @@ export class SequelizeService extends Service {
     }
 
     overrides.map(include => {
-      const inIncludes = includes.findIndex(i => i.model === include.model)
-      if (inIncludes !== -1 && includes[inIncludes]['as'] === include.as) {
+      const inIncludes = include.model
+        ? includes.findIndex(i => ((i.model === include.model) && (i.as === include.as))
+          || (include.model.name &&
+            ((i.associate && i.associate.source.name) === (include.model.name))))
+        : includes.findIndex(i => (i.association === include.association)
+          || (include.association.source.name &&
+            ((i.model && i.model.name) === include.association.source.name)))
+
+      if (inIncludes !== -1) {
         includes[inIncludes] = include
       }
       else {
