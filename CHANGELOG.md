@@ -1,6 +1,9 @@
 # spool-sequelize
 :package: Sequelize.js Spool http://sequelizejs.com
 
+## v1.5.0
+Fabrix 1.5 compatibility.
+
 ## v1.0.4
 Resolvers are now in effect
 
