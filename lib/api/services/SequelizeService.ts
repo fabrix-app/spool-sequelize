@@ -59,9 +59,9 @@ export class SequelizeService extends Service {
         ? includes.findIndex(i => ((i.model === include.model) && (i.as === include.as))
           || (include.model.name &&
             ((i.associate && i.associate.source.name) === (include.model.name))))
-        : includes.findIndex(i => (i.association === include.association)
-          || (include.association.source.name &&
-            ((i.model && i.model.name) === include.association.source.name)))
+        : includes.findIndex(i => (i.associate === include.associate)
+          || (include.associate.source.name &&
+            ((i.model && i.model.name) === include.associate.source.name)))
 
       if (inIncludes !== -1) {
         includes[inIncludes] = include

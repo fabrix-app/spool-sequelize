@@ -125,4 +125,32 @@ describe('api.services.SequelizeService', () => {
     assert.equal(newOptions.include[1].model.name, 'world')
     done()
   })
+  it('should replace model with association that match with multiple include objects', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{ model: {name: 'hello'} }]
+    }, {
+      include: [
+        {model: {name: 'world'}},
+        {associate: {source: {name: 'hello'}}}
+      ]
+    })
+    assert.equal(newOptions.include.length, 2)
+    assert.equal(newOptions.include[0].associate.source.name, 'hello')
+    assert.equal(newOptions.include[1].model.name, 'world')
+    done()
+  })
+  it('should replace association with model that match with multiple include objects', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [
+        {model: {name: 'world'}},
+        {associate: {source: {name: 'hello'}}}
+      ]
+    }, {
+      include: [{model: {name: 'hello'}}]
+    })
+    assert.equal(newOptions.include.length, 2)
+    assert.equal(newOptions.include[0].model.name, 'world')
+    assert.equal(newOptions.include[1].model.name, 'hello')
+    done()
+  })
 })
