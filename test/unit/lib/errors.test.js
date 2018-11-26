@@ -2,7 +2,7 @@
 const assert = require('assert')
 const errors = require('../../../dist/errors')
 
-describe('errors', () => {
+describe('lib.errors', () => {
   describe('#ModelErrors', () => {
     it('should create E_NOT_FOUND Error', () => {
       const err = new errors.ModelError('E_NOT_FOUND', 'Not Found')
