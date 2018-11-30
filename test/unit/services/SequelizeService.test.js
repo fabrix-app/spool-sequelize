@@ -103,7 +103,7 @@ describe('api.services.SequelizeService', () => {
   })
   it('should replace association object with model that match', (done) => {
     const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
-      include: [{ target: 'model' }}]
+      include: [{ target: 'model' }]
     }, {
         include: [{ model: 'model' }]
     })
