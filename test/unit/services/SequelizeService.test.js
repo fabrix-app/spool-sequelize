@@ -2,7 +2,7 @@
 
 const assert = require('assert')
 
-describe.only('api.services.SequelizeService', () => {
+describe('api.services.SequelizeService', () => {
   it.skip('should do stringify sort', (done) => {
     const sort = [['created_at','ASC']]
     const s = global.app.services.SequelizeService.sortToString(sort)
