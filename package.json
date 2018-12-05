@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-sequelize",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Spool - Datastore Spool for Sequelize.js http://sequelizejs.com",
   "scripts": {
     "build": "tsc -p ./lib/tsconfig.release.json",
@@ -22,6 +22,10 @@
     {
       "name": "Jaumard",
       "url": "https://github.com/jaumard"
+    },
+    {
+      "name": "pmould",
+      "url": "http://pmouldeveloper.co"
     }
   ],
   "keywords": [
@@ -54,8 +58,8 @@
   "devDependencies": {
     "@fabrix/fabrix": "^1.6.0",
     "@fabrix/lint": "^1.0.0-alpha.3",
-    "@fabrix/spool-router": "^1.5.1",
-    "@fabrix/spool-tapestries": "^1.5.1",
+    "@fabrix/spool-router": "^1.6.0",
+    "@fabrix/spool-tapestries": "^1.6.0",
     "@types/lodash": "^4.14.109",
     "@types/node": "~10.3.4",
     "@types/sequelize": "^4.27.31",
@@ -71,8 +75,8 @@
     "typescript": "~2.8.1"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.5.9",
-    "@fabrix/spool-router": "^1.5.1"
+    "@fabrix/fabrix": "^1.6.0",
+    "@fabrix/spool-router": "^1.6.0"
   },
   "engines": {
     "node": ">= 7.6.0"
