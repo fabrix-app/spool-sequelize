@@ -11,5 +11,15 @@ export const Validator = {
         return resolve(value)
       })
     })
+  },
+  validateModelsConfig (config) {
+    return new Promise((resolve, reject) => {
+      joi.validate(config, Schemas.modelsConfig, (err, value) => {
+        if (err) {
+          return reject(err)
+        }
+        return resolve(value)
+      })
+    })
   }
 }
