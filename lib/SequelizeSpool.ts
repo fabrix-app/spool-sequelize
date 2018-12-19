@@ -50,7 +50,7 @@ export class SequelizeSpool extends DatastoreSpool {
       this.app.log.warn('No store configured at config.stores, models will be ignored')
     }
     const models = this.app.config.get('models')
-    if (!models) {
+    if (models && Object.keys(models).length === 0) {
       this.app.log.warn('No models configured at config.models, models will be ignored')
     }
     return Promise.all([
