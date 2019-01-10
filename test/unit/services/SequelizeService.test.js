@@ -91,4 +91,95 @@ describe('api.services.SequelizeService', () => {
     assert.equal(newOptions.hello, 'world')
     done()
   })
+  it('should replace model with association object that match', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{ model: 'hello' }]
+    }, {
+        include: [{ target: 'hello' }]
+      })
+    assert.equal(newOptions.include.length, 1)
+    assert.equal(newOptions.include[0].target, 'hello')
+    done()
+  })
+  it('should replace association object with model that match', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{ target: 'model' }]
+    }, {
+        include: [{ model: 'model' }]
+    })
+    assert.equal(newOptions.include.length, 1)
+    assert.equal(newOptions.include[0].model, 'model')
+    done()
+  })
+
+  it('should replace model with association object that match', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [ {model: 'hello' }]
+    }, {
+        include: [{ target: 'hello' }]
+      })
+    assert.equal(newOptions.include.length, 1)
+    assert.equal(newOptions.include[0].target, 'hello')
+    done()
+  })
+  it('should replace model with association prop that match', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{ model: 'hello' }]
+    }, {
+        include: [{ association: { target: 'hello' }}
+      ]
+      })
+    assert.equal(newOptions.include.length, 1)
+    assert.equal(newOptions.include[0].association.target, 'hello')
+    done()
+  })
+  it('should replace association with model that match', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{ association: { target: 'model' }}]
+    }, {
+        include: [{ model: 'model' }]
+    })
+    assert.equal(newOptions.include.length, 1)
+    assert.equal(newOptions.include[0].model, 'model')
+    done()
+  })
+  it('should merge includes when one uses model and another uses associate include formats', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{association: { target: 'hello'} }]
+    }, {
+      include: [{ model: 'world' }]
+    })
+    assert.equal(newOptions.include.length, 2)
+    assert.equal(newOptions.include[0].association.target, 'hello')
+    assert.equal(newOptions.include[1].model, 'world')
+    done()
+  })
+  it('should replace model with association prop that match with multiple include objects', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [{ model: 'hello' }]
+    }, {
+      include: [
+        {model: 'world'},
+        {association: { target: 'hello' }}
+      ]
+    })
+    assert.equal(newOptions.include.length, 2)
+    assert.equal(newOptions.include[0].association.target, 'hello')
+    assert.equal(newOptions.include[1].model, 'world')
+    done()
+  })
+  it('should replace association with model that match with multiple include objects', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      include: [
+        { model: 'world' },
+        {association: { target: 'hello' }}
+      ]
+    }, {
+      include: [{ model: 'hello' }]
+    })
+    assert.equal(newOptions.include.length, 2)
+    assert.equal(newOptions.include[0].model, 'world')
+    assert.equal(newOptions.include[1].model, 'hello')
+    done()
+  })
 })

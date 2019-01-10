@@ -3,6 +3,7 @@ const joi = require('joi')
 
 export const Schemas = {
   storesConfig: joi.object(),
+  modelsConfig: joi.object(),
 
   models: joi.object().keys({
     autoPK: joi.boolean(),

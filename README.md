@@ -7,8 +7,6 @@
 [![Dependency Status][daviddm-image]][daviddm-url]
 [![Follow @FabrixApp on Twitter][twitter-image]][twitter-url]
 
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/fabrix-app/spool-sequelize.svg?columns=all)](https://waffle.io/fabrix-app/spool-sequelize)
-
 Loads Application Models (in `api/models`) into the Sequelize ORM; Integrates with [spool-router](https://github.com/fabrix-app/spool-router) to
 generate Tapestries for routes.
 
@@ -23,16 +21,17 @@ Sequelize is a SQL orm and this spool uses that to add power to Fabrix models.
 ### Configure
 
 ```js
-// config/main.js
-module.exports = {
+// config/main.ts
+import { SeqquelizeSpool } from '@fabrix/spool-sequelize'
+export const main = {
   // ...
   spools: [
-    require('@fabrix/spool-sequelize').SequelizeSpool
+    SequelizeSpool
   ]
 }
 ```
 
-A basic `config/store.js` can be found here : https://github.com/fabrix-app/spool-sequelize/blob/master/lib/archetype/config/database.js
+A basic `config/store.ts` can be found here : https://github.com/fabrix-app/spool-sequelize/blob/master/lib/archetype/config/database.js
 
 ### Models
 
