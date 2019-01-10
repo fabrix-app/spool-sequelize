@@ -63,6 +63,7 @@
     "@types/lodash": "^4.14.109",
     "@types/node": "~10.3.4",
     "@types/sequelize": "^4.27.31",
+    "merge-options": "^1.0.1",
     "mocha": "^5",
     "nyc": "^13.1.0",
     "pg": "^6.4.2",
