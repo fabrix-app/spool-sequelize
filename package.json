@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-sequelize",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Spool - Datastore Spool for Sequelize.js http://sequelizejs.com",
   "scripts": {
     "build": "tsc -p ./lib/tsconfig.release.json",
@@ -51,9 +51,10 @@
     "url": "git+https://github.com/fabrix-app/spool-sequelize.git"
   },
   "dependencies": {
-    "joi": "^14.1.1",
+    "joi": "^14.3.1",
     "lodash": "^4.17.11",
-    "sequelize": "^4.41.2"
+    "merge-options": "^1.0.1",
+    "sequelize": "^4.43.0"
   },
   "devDependencies": {
     "@fabrix/fabrix": "^1.6.0",
@@ -62,13 +63,12 @@
     "@fabrix/spool-tapestries": "^1.6.0",
     "@types/lodash": "^4.14.109",
     "@types/node": "~10.3.4",
-    "@types/sequelize": "^4.27.31",
-    "merge-options": "^1.0.1",
+    "@types/sequelize": "^4.27.39",
     "mocha": "^5",
-    "nyc": "^13.1.0",
+    "nyc": "^13.3.0",
     "pg": "^6.4.2",
     "smokesignals": "^3",
-    "sqlite3": "^4.0.0",
+    "sqlite3": "^4.0.6",
     "tslib": "~1.9.0",
     "tslint": "~5.10.0",
     "tslint-microsoft-contrib": "~5.0.3",
