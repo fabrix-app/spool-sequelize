@@ -1,6 +1,7 @@
 'use strict'
 
 const assert = require('assert')
+const sequelize = require('sequelize')
 
 describe('api.services.SequelizeService', () => {
   it.skip('should do stringify sort', (done) => {
@@ -66,6 +67,21 @@ describe('api.services.SequelizeService', () => {
     assert.equal(newOptions.where.created_at, 'now')
     done()
   })
+  it('should merge wheres with operator symbol', (done) => {
+    const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
+      where: {}
+    }, {
+      where: {
+        name: {
+          [sequelize.Op.in]: [1, 2, 3]
+      }}
+    })
+    assert.equal(newOptions.where.name[sequelize.Op.in][0], 1)
+    assert.equal(newOptions.where.name[sequelize.Op.in][1], 2)
+    assert.equal(newOptions.where.name[sequelize.Op.in][2], 3)
+    done()
+  })
+  
   it('should merge limit', (done) => {
     const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
       limit: null
