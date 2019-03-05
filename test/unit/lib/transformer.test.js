@@ -8,6 +8,15 @@ describe('lib.Transformer', () => {
     app = new FabrixApp(require('../../fixtures/app'))
   })
 
+  describe('#getPlugins', () => {
+    it('should transform properly', () => {
+      const plugins = lib.Transformer.getPlugins(app)
+      const connections = lib.Transformer.getConnections(app, plugins)
+      const models = lib.Transformer.getModels(app, connections)
+      assert.ok(plugins)
+    })
+  })
+
   describe('#getConnections', () => {
     it('should transform properly', () => {
       const connections = lib.Transformer.getConnections(app)

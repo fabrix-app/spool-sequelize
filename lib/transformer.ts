@@ -198,15 +198,46 @@ export const Transformer = {
     return model
   },
 
+  definePlugins(app: FabrixApp, store_config = {}, plugins = {}) {
+    const global_plugins = Object.keys(plugins)
+    const store_plugins = Object.keys(store_config).filter(n => {
+      if (global_plugins.indexOf(n) === -1) {
+        return n
+      }
+    })
+    return [
+      ...global_plugins.map(n => {
+        app.log.debug(`Defining Global Sequelize Plugin ${n}`)
+        return plugins[n]
+      }),
+      ...store_plugins.map(n => {
+        app.log.debug(`Defining Local Sequelize Plugin ${n}`)
+        return store_config[n]
+      })
+    ]
+  },
+
   /**
    * Create Sequelize object based on config options
    * @param  {Object} app.config.store
    * @return {Sequelize} Sequelize instance
    */
-  createConnectionsFromConfig (app: FabrixApp, config: {[key: string]: any}) {
+  createConnectionsFromConfig (app: FabrixApp, config: {[key: string]: any}, plugins: {[key: string]: any} = {}) {
     const logger = function(str) {
       app.log.debug(str)
     }
+    const plugs = Transformer.definePlugins(app, config.plugins, plugins)
+
+    // Add plugins
+    plugs.forEach(plug => {
+      try {
+        plug(Sequelize)
+      }
+      catch (err) {
+        app.log.error(err)
+      }
+    })
+
     if (config.uri) {
       // Sequelize modify options object
       return new Sequelize(config.uri, Object.assign({}, { logging: logger }, config))
@@ -249,11 +280,11 @@ export const Transformer = {
   /**
    * Transform the FabrixApp "app.config.stores" into a Sequelize object
    */
-  getConnections (app: FabrixApp) {
+  getConnections (app: FabrixApp, plugins: {[key: string]: any} = {}) {
     const stores = Transformer.pickStores(app.config.get('stores'))
     const sequelize = {}
     Object.keys(stores).forEach(key => {
-      sequelize[key] = Transformer.createConnectionsFromConfig(app, stores[key])
+      sequelize[key] = Transformer.createConnectionsFromConfig(app, stores[key], plugins)
       sequelize[key].fabrixApp = app
       sequelize[key].migrate = stores[key].migrate
       sequelize[key].models = {}
@@ -287,5 +318,13 @@ export const Transformer = {
       // Convenience link between model.associations and the sequelize.model.associations
       // models[modelName].associations = models[modelName].resolver.sequelizeModel.associations
     })
+  },
+
+  /**
+   * Add Plugins
+   */
+  getPlugins(app: FabrixApp) {
+    const plugins = app.config.get('sequelize.plugins')
+    return plugins
   }
 }

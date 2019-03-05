@@ -208,13 +208,21 @@ const App = {
         require('../../dist/index').SequelizeSpool // spool-sequelize
       ]
     },
+    sequelize: {
+      plugins: {
+        test_global: require('./testPlugin')
+      }
+    },
     stores: {
       teststore: {
         migrate: 'drop',
         orm: 'sequelize',
         database: 'Sequelize',
         host: '127.0.0.1',
-        dialect: 'postgres'
+        dialect: 'postgres',
+        plugins: {
+          test_local: require('./testPlugin')
+        }
       },
       storeoverride: {
         migrate: 'drop',

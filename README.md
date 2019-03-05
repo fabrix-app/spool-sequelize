@@ -33,6 +33,34 @@ export const main = {
 
 A basic `config/store.ts` can be found here : https://github.com/fabrix-app/spool-sequelize/blob/master/lib/archetype/config/database.js
 
+### Plugins
+There are 2 ways to define a plugin for Sequelize in spool-sequelize, for all sequelize connections or just for a particular one:
+
+1) Define `plugins` in `config.sequelize`
+```js
+// config/sequelize.ts
+export const sequelize = {
+  plugins: {
+    my_global_plugin: require('sequelize-plugin-name')
+  }
+}
+```
+
+2) Define a plugins just for a particular store connection
+```js
+// config/stores.ts
+export const stores = {
+  uristore: {
+    migrate: 'drop',
+    orm: 'sequelize',
+    uri: 'sqlite://testuser:password@testhost:1234/testdb',
+    plugins: {
+      my_local_plugin: require('sequelize-plugin-name')
+    }
+  }
+}
+```
+
 ### Models
 
 ```js
