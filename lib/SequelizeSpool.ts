@@ -15,6 +15,7 @@ import * as api  from './api/index'
 export class SequelizeSpool extends DatastoreSpool {
   _datastore = Sequelize
 
+  private _plugins: {[key: string]: any} = { }
   private _connections: {[key: string]: any} = { }
   private _models: {[key: string]: any} = { }
 
@@ -26,13 +27,19 @@ export class SequelizeSpool extends DatastoreSpool {
     })
   }
 
-  get models() {
-    return this._models || {}
+  get plugins () {
+    return this._plugins || {}
   }
 
   get connections () {
     return this._connections || {}
   }
+
+  get models() {
+    return this._models || {}
+  }
+
+
   /**
    * Validate the database config, and api.model definitions
    */
@@ -55,7 +62,8 @@ export class SequelizeSpool extends DatastoreSpool {
     }
     return Promise.all([
       Validator.validateStoresConfig(stores),
-      Validator.validateModelsConfig(models)
+      Validator.validateModelsConfig(models),
+      Validator.validatePluginsConfig(models)
     ])
   }
 
@@ -63,8 +71,9 @@ export class SequelizeSpool extends DatastoreSpool {
    * Merge configuration into models, load Sequelize collections.
    */
   configure() {
+    this._plugins = Transformer.getPlugins(this.app)
     // Holds a collection of the connections made through Sequelize
-    this._connections = Transformer.getConnections(this.app)
+    this._connections = Transformer.getConnections(this.app, this.plugins)
     // Holds a collection of the Sequelize models
     this._models = Transformer.getModels(this.app, this.connections)
   }

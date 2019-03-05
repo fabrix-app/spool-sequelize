@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-sequelize",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Spool - Datastore Spool for Sequelize.js http://sequelizejs.com",
   "scripts": {
     "build": "tsc -p ./lib/tsconfig.release.json",
@@ -84,6 +84,6 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fabrix-app/spool-tapestries/issues"
+    "url": "https://github.com/fabrix-app/spool-sequelize/issues"
   }
 }
