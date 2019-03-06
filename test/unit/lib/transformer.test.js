@@ -42,5 +42,9 @@ describe('lib.Transformer', () => {
       const connections = lib.Transformer.getConnections(app)
       const models = lib.Transformer.getModels(app, connections)
     })
+    it('should not have a primary key for testModel3', () => {
+      const connections = lib.Transformer.getConnections(app)
+      const models = lib.Transformer.getModels(app, connections)
+    })
   })
 })

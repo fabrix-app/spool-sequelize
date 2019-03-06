@@ -4,6 +4,8 @@ const _ = require('lodash')
 const smokesignals = require('smokesignals')
 const testModel = require('./testmodel')
 const testModel2 = require('./testmodel2')
+const testModel3 = require('./testmodel3')
+
 const SequelizeResolver = require('../../dist/index').SequelizeResolver
 
 const Model = require('@fabrix/fabrix/dist/common').FabrixModel
@@ -197,7 +199,8 @@ const App = {
         }
       },
       testModel,
-      testModel2
+      testModel2,
+      testModel3
     }
   },
   config: {
