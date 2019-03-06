@@ -205,7 +205,7 @@ export const Transformer = {
         return n
       }
     })
-    return [
+    const plugs = [
       ...global_plugins.map(n => {
         app.log.debug(`Defining Global Sequelize Plugin ${n}`)
         return plugins[n]
@@ -215,6 +215,7 @@ export const Transformer = {
         return store_config[n]
       })
     ]
+    return plugs
   },
 
   /**
@@ -228,10 +229,13 @@ export const Transformer = {
     }
     const plugs = Transformer.definePlugins(app, config.plugins, plugins)
 
+    // Make a copy so plugins don't collide on multiple stores
+    const Seq = Sequelize
+
     // Add plugins
     plugs.forEach(plug => {
       try {
-        plug(Sequelize)
+        plug(Seq)
       }
       catch (err) {
         app.log.error(err)
@@ -240,10 +244,10 @@ export const Transformer = {
 
     if (config.uri) {
       // Sequelize modify options object
-      return new Sequelize(config.uri, Object.assign({}, { logging: logger }, config))
+      return new Seq(config.uri, Object.assign({}, { logging: logger }, config))
     }
     else {
-      return new Sequelize(
+      return new Seq(
         config.database,
         config.username || process.env.POSTGRES_USER,
         config.password || process.env.POSTGRES_PASSWORD,

@@ -46,6 +46,20 @@ export class SequelizeResolver extends FabrixResolver {
   public connect(modelName, schema, options) {
     // Define the Sequelize Connection on the provided connection
     this._sequelizeModel = this._connection.define(modelName, schema, options)
+
+    // Special shim to make removing the primary key easier if not needed
+    if (options.primaryKey === false) {
+      this._sequelizeModel.removeAttribute('id')
+    }
+
+    // Special to make it easy to remove attributes created by Sequelize
+    // Why this isn't just part of Sequelize? Who knows.
+    if (options.removeAttributes && options.removeAttributes.length > 0) {
+      options.removeAttributes.forEach(a => {
+        this._sequelizeModel.removeAttribute(a)
+      })
+    }
+
     // Add a copy of the Fabrix app to the connection model
     this._sequelizeModel.app = this.app
 
