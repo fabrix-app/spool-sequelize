@@ -4,6 +4,8 @@ import { Transformer } from './transformer'
 
 export class SequelizeResolver extends FabrixResolver {
   private _connection
+  private _options
+  private _schema
   private _sequelize
   private _sequelizeModel
 
@@ -35,6 +37,20 @@ export class SequelizeResolver extends FabrixResolver {
     return this._sequelize
   }
 
+  /**
+   * Get options provided to the model when connected
+   */
+  get options() {
+    return this._options
+  }
+
+  /**
+   * Get schema provided to the model when connected
+   */
+  get schame() {
+    return this._schema
+  }
+
   get datastore() {
     return this._sequelize
   }
@@ -44,6 +60,8 @@ export class SequelizeResolver extends FabrixResolver {
   }
 
   public connect(modelName, schema, options) {
+    this._options = options
+
     // Define the Sequelize Connection on the provided connection
     this._sequelizeModel = this._connection.define(modelName, schema, options)
 
@@ -248,7 +266,17 @@ export class SequelizeResolver extends FabrixResolver {
    */
   findById(id, options = { }) {
     if (this._sequelizeModel) {
-      return this._sequelizeModel.findById(id, options)
+      this.app.log.info('findById is deprecated, use findByPk instead')
+      return this._sequelizeModel.findByPk(id, options)
+    }
+  }
+
+  /**
+   *
+   */
+  findByPk(id, options = { }) {
+    if (this._sequelizeModel) {
+      return this._sequelizeModel.findByPk(id, options)
     }
   }
 
