@@ -233,9 +233,17 @@ export const Transformer = {
     const Seq = Sequelize
 
     // Add plugins
-    plugs.forEach(plug => {
+    plugs.forEach((plug: any) => {
       try {
-        plug(Seq)
+        if (typeof plug === 'function') {
+          plug(Seq)
+        }
+        else if (typeof plug === 'object' && plug.func && plug.config) {
+          plug.func(Seq, plug.config)
+        }
+        else {
+          app.log.debug(`Transformer: ${plug} was not a function or Fabrix sequelize object`)
+        }
       }
       catch (err) {
         app.log.error(err)

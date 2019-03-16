@@ -224,7 +224,11 @@ const App = {
         host: '127.0.0.1',
         dialect: 'postgres',
         plugins: {
-          test_local: require('./testPlugin')
+          test_local: require('./testPlugin'),
+          test_local_config: {
+            func: require('./testPlugin2'),
+            config: {}
+          }
         }
       },
       storeoverride: {
