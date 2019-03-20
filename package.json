@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-sequelize",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "Spool - Datastore Spool for Sequelize.js http://sequelizejs.com",
   "scripts": {
     "build": "tsc -p ./lib/tsconfig.release.json",
@@ -54,7 +54,7 @@
     "joi": "^14.3.1",
     "lodash": "^4.17.11",
     "merge-options": "^1.0.1",
-    "sequelize": "^4.43.0"
+    "sequelize": "4.43.0"
   },
   "devDependencies": {
     "@fabrix/fabrix": "^1.6.0",
@@ -63,7 +63,7 @@
     "@fabrix/spool-tapestries": "^1.6.0",
     "@types/lodash": "^4.14.109",
     "@types/node": "~10.3.4",
-    "@types/sequelize": "^4.27.39",
+    "@types/sequelize": "4.27.39",
     "mocha": "^5",
     "nyc": "^13.3.0",
     "pg": "^6.4.2",
