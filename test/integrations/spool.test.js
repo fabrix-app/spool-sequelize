@@ -154,7 +154,7 @@ describe('Spool', () => {
       })
   })
   it('should find an instance by id', (done) => {
-    const instance = global.app.models.testModel.findById(1)
+    const instance = global.app.models.testModel.findByPk(1)
       .then(i => {
         done()
       })
@@ -201,6 +201,15 @@ describe('Spool', () => {
 
   it('should get table name', (done) => {
     const instance = global.app.models.testModel.getTableName()
+    done()
+  })
+
+  it('should be able to access the options provided', (done) => {
+    const instance = global.app.models.testModel.resolver.options
+    done()
+  })
+  it('should be able to access the schema provided', (done) => {
+    const instance = global.app.models.testModel.resolver.schema
     done()
   })
 
