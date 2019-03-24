@@ -47,7 +47,7 @@ export class SequelizeResolver extends FabrixResolver {
   /**
    * Get schema provided to the model when connected
    */
-  get schame() {
+  get schema() {
     return this._schema
   }
 
@@ -61,6 +61,7 @@ export class SequelizeResolver extends FabrixResolver {
 
   public connect(modelName, schema, options) {
     this._options = options
+    this._schema = schema
 
     // Define the Sequelize Connection on the provided connection
     this._sequelizeModel = this._connection.define(modelName, schema, options)
