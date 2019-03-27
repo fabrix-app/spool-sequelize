@@ -230,16 +230,16 @@ export const Transformer = {
     const plugs = Transformer.definePlugins(app, config.plugins, plugins)
 
     // Make a copy so plugins don't collide on multiple stores
-    const Seq = Sequelize
+    let Seq = Sequelize
 
     // Add plugins
     plugs.forEach((plug: any) => {
       try {
         if (typeof plug === 'function') {
-          plug(Seq)
+          Seq = plug(Seq)
         }
         else if (typeof plug === 'object' && plug.func && plug.config) {
-          plug.func(Seq, plug.config)
+          Seq = plug.func(Seq, plug.config)
         }
         else {
           app.log.debug(`Transformer: ${plug} was not a function or Fabrix sequelize object`)
