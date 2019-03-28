@@ -2,6 +2,8 @@ const assert = require('assert')
 const lib = require('../../../dist/index')
 const FabrixApp = require('@fabrix/fabrix').FabrixApp
 
+const Sequelize = require('sequelize')
+
 describe('lib.Transformer', () => {
   let app
   beforeEach(() => {
@@ -11,21 +13,21 @@ describe('lib.Transformer', () => {
   describe('#getPlugins', () => {
     it('should transform properly', () => {
       const plugins = lib.Transformer.getPlugins(app)
-      const connections = lib.Transformer.getConnections(app, plugins)
-      const models = lib.Transformer.getModels(app, connections)
+      const connections = lib.Transformer.getConnections(app, Sequelize, plugins)
+      const models = lib.Transformer.getModels(app, Sequelize, connections)
       assert.ok(plugins)
     })
   })
 
   describe('#getConnections', () => {
     it('should transform properly', () => {
-      const connections = lib.Transformer.getConnections(app)
+      const connections = lib.Transformer.getConnections(app, Sequelize)
 
       assert(connections.teststore)
       assert.equal(connections.storeoverride.options.dialect, 'postgres')
     })
     it('should transform uri properly', () => {
-      const connections = lib.Transformer.getConnections(app)
+      const connections = lib.Transformer.getConnections(app, Sequelize)
       assert(connections.uristore)
       assert.equal(connections.uristore.options.dialect, 'sqlite')
       assert.equal(connections.uristore.options.host, 'testhost')
@@ -39,12 +41,12 @@ describe('lib.Transformer', () => {
   })
   describe('#getModels', () => {
     it('should transform properly', () => {
-      const connections = lib.Transformer.getConnections(app)
-      const models = lib.Transformer.getModels(app, connections)
+      const connections = lib.Transformer.getConnections(app, Sequelize)
+      const models = lib.Transformer.getModels(app, Sequelize, connections)
     })
     it('should not have a primary key for testModel3', () => {
-      const connections = lib.Transformer.getConnections(app)
-      const models = lib.Transformer.getModels(app, connections)
+      const connections = lib.Transformer.getConnections(app, Sequelize)
+      const models = lib.Transformer.getModels(app, Sequelize, connections)
     })
   })
 })

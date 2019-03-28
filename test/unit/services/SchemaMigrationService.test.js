@@ -3,6 +3,8 @@ const lib = require('../../../dist/index')
 const assert = require('assert')
 const FabrixApp = require('@fabrix/fabrix').FabrixApp
 const TestModel = require('../../fixtures/testmodel')
+const Sequelize = require('sequelize')
+
 const App = {
   pkg: {
     name: 'spool-sequelize-test'
@@ -45,8 +47,8 @@ describe('api.services.SchemaMigrationService', () => {
   beforeEach(() => {
     app = new FabrixApp(App)
     SchemaMigrationService = app.services.SchemaMigrationService
-    connections = lib.Transformer.getConnections(app) || {}
-    models = lib.Transformer.getModels(app, connections) || {}
+    connections = lib.Transformer.getConnections(app, Sequelize) || {}
+    models = lib.Transformer.getModels(app, Sequelize, connections) || {}
 
     it('should exist', () => {
       assert(SchemaMigrationService)
