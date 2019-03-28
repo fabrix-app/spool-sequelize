@@ -73,9 +73,9 @@ export class SequelizeSpool extends DatastoreSpool {
   configure() {
     this._plugins = Transformer.getPlugins(this.app)
     // Holds a collection of the connections made through Sequelize
-    this._connections = Transformer.getConnections(this.app, this.plugins)
+    this._connections = Transformer.getConnections(this.app, this._datastore, this.plugins)
     // Holds a collection of the Sequelize models
-    this._models = Transformer.getModels(this.app, this.connections)
+    this._models = Transformer.getModels(this.app, this._datastore, this.connections)
   }
 
   /**

@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import * as Sequelize from 'sequelize'
+// import * as Sequelize from 'sequelize'
 import { FabrixApp } from '@fabrix/fabrix'
 import { FabrixModel } from '@fabrix/fabrix/dist/common'
 import { pickBy, isString, startsWith } from 'lodash'
@@ -95,8 +95,8 @@ export const Transformer = {
     return props
   },
 
-  getModelOptions: (app: FabrixApp, model) => {
-    const config = model.constructor.config(app, Sequelize)
+  getModelOptions: (app: FabrixApp, sequelize, model) => {
+    const config = model.constructor.config(app, sequelize)
     // Options must be
     if (!config.options) {
       config.options = {}
@@ -109,18 +109,18 @@ export const Transformer = {
     return config.options
   },
 
-  getModelSchema: (app: FabrixApp, model) => {
-    const schema = Transformer.transformSchema(model.constructor.schema(app, Sequelize))
+  getModelSchema: (app: FabrixApp, sequelize, model) => {
+    const schema = Transformer.transformSchema(sequelize, model.constructor.schema(app, sequelize))
     return schema
   },
 
-  replaceDataType: (dataType) => {
+  replaceDataType: (sequelize, dataType) => {
     let transformed
     try {
       Object.keys(Transformer.dataTypes).forEach(type => {
         const exp = new RegExp(type)
         if (exp.test(dataType)) {
-          transformed = Sequelize[dataType.replace(exp, Transformer.dataTypes[type])]
+          transformed = sequelize[dataType.replace(exp, Transformer.dataTypes[type])]
           throw Transformer.BreakException
         }
       })
@@ -136,11 +136,11 @@ export const Transformer = {
    * Transforms Schema to Sequelize method if defined as a string
    * Common from Spools built for waterline
    */
-  transformSchema: (schema) => {
+  transformSchema: (sequelize, schema) => {
     const transformed: {[key: string]: any } = {}
     Object.keys(schema).forEach(s => {
       if (typeof schema[s] === 'string') {
-        transformed[s] = Transformer.replaceDataType(schema[s])
+        transformed[s] = Transformer.replaceDataType(sequelize, schema[s])
       }
       // else if (
       //   typeof schema[s] === 'object'
@@ -174,14 +174,14 @@ export const Transformer = {
     return methods
   },
 
-  defineModel: (app: FabrixApp, model: FabrixModel, connections) => {
+  defineModel: (app: FabrixApp, sequelize, model: FabrixModel, connections) => {
     const modelName = model.constructor.name
     const modelConfig = model.config
     const store = modelConfig.store || app.config.get('models.defaultStore')
     const connection = connections[store]
     const migrate = modelConfig.migrate || app.config.get('models.migrate') || connection.migrate
-    const options =  Transformer.getModelOptions(app, model)
-    const schema = Transformer.getModelSchema(app, model)
+    const options =  Transformer.getModelOptions(app, sequelize, model)
+    const schema = Transformer.getModelSchema(app, sequelize, model)
 
     if (!model.resolver || !model.resolver.connect) {
       throw new Error(`${modelName} was set to use Sequelize but the resolver is missing "connect"`)
@@ -223,14 +223,14 @@ export const Transformer = {
    * @param  {Object} app.config.store
    * @return {Sequelize} Sequelize instance
    */
-  createConnectionsFromConfig (app: FabrixApp, config: {[key: string]: any}, plugins: {[key: string]: any} = {}) {
+  createConnectionsFromConfig (app: FabrixApp, sequelize, config: {[key: string]: any}, plugins: {[key: string]: any} = {}) {
     const logger = function(str) {
       app.log.debug(str)
     }
     const plugs = Transformer.definePlugins(app, config.plugins, plugins)
 
     // Make a copy so plugins don't collide on multiple stores
-    let Seq = Sequelize
+    let Seq = sequelize
 
     // Add plugins
     plugs.forEach((plug: any) => {
@@ -292,27 +292,27 @@ export const Transformer = {
   /**
    * Transform the FabrixApp "app.config.stores" into a Sequelize object
    */
-  getConnections (app: FabrixApp, plugins: {[key: string]: any} = {}) {
+  getConnections (app: FabrixApp, sequelize, plugins: {[key: string]: any} = {}) {
     const stores = Transformer.pickStores(app.config.get('stores'))
-    const sequelize = {}
+    const _sequelize = {}
     Object.keys(stores).forEach(key => {
-      sequelize[key] = Transformer.createConnectionsFromConfig(app, stores[key], plugins)
-      sequelize[key].fabrixApp = app
-      sequelize[key].migrate = stores[key].migrate
-      sequelize[key].models = {}
+      _sequelize[key] = Transformer.createConnectionsFromConfig(app, sequelize, stores[key], plugins)
+      _sequelize[key].fabrixApp = app
+      _sequelize[key].migrate = stores[key].migrate
+      _sequelize[key].models = {}
     })
 
-    return sequelize
+    return _sequelize
   },
 
   /**
    * Transform sequelize connections for sequelize models
    */
-  getModels (app: FabrixApp, connections) {
+  getModels (app: FabrixApp, sequelize, connections) {
     const models = Transformer.pickModels(app, connections)
     const sModels = {}
     Object.keys(models).forEach(modelName => {
-      sModels[modelName] = Transformer.defineModel(app, models[modelName], connections).resolver.sequelizeModel
+      sModels[modelName] = Transformer.defineModel(app, sequelize, models[modelName], connections).resolver.sequelizeModel
     })
     Transformer.associateModels(app, models, sModels)
     return sModels
