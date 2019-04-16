@@ -5,6 +5,8 @@ const smokesignals = require('smokesignals')
 const testModel = require('./testmodel')
 const testModel2 = require('./testmodel2')
 const testModel3 = require('./testmodel3')
+const testModelExtend = require('./testmodelExtend')
+const testModelExtend2 = require('./testmodelExtend2')
 
 const SequelizeResolver = require('../../dist/index').SequelizeResolver
 
@@ -200,7 +202,9 @@ const App = {
       },
       testModel,
       testModel2,
-      testModel3
+      testModel3,
+      testModelExtend,
+      testModelExtend2
     }
   },
   config: {
