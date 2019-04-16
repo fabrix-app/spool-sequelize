@@ -158,10 +158,12 @@ export const Transformer = {
   },
 
   /**
-   * Get the prototypes of a model
+   * Get the prototypes of a model and it's parent
    */
   getModelPrototypes: (model) => {
-    return Object.getPrototypeOf(model)
+    const sup = model.__proto__ ? Object.getPrototypeOf(model.__proto__) : {}
+    const props = Object.getPrototypeOf(model)
+    return {...sup, ...props}
   },
 
   /**

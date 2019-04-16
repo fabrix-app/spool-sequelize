@@ -46,6 +46,17 @@ describe('Spool', () => {
     done()
   })
 
+
+  it('should access an inherited instanceLevelMethod', (done) => {
+    const instance = global.app.models.testModelExtend2.build({name: 'test'})
+    assert.equal(instance.nextInstanceLevelMethod(), 'baz')
+    assert.equal(instance.instanceLevelMethod(), 'bar')
+    assert.equal(instance.superLevelMethod(), 'baf')
+    assert.ok(instance.app)
+    assert.ok(instance.app.config.get('main'))
+    done()
+  })
+
   it('should save an instance', (done) => {
     const instance = global.app.models.testModel.build({name: 'test'})
     instance.save().then(i => {
@@ -126,6 +137,16 @@ describe('Spool', () => {
 
   it('should bulk create instances', (done) => {
     const instance = global.app.models.testModel.bulkCreate([{name: 'test'}])
+      .then(i => {
+        done()
+      })
+      .catch(err => {
+        done(err)
+      })
+  })
+  // TODO ENABLE IN Sequelize 5.0
+  it.skip('should bulk create instances', (done) => {
+    const instance = global.app.models.testModel.bulkUpdate({name: 'test'}, { name: 'test' })
       .then(i => {
         done()
       })

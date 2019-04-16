@@ -183,6 +183,15 @@ export class SequelizeResolver extends FabrixResolver {
   /**
    *
    */
+  bulkUpdate(values: any, records: any, options = {}) {
+    if (this._sequelizeModel) {
+      return this._sequelizeModel.bulkUpdate(values, records, options)
+    }
+  }
+
+  /**
+   *
+   */
   count(criteria, options = { }) {
     if (this._sequelizeModel) {
       return this._sequelizeModel.count(criteria, options)
