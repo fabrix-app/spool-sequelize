@@ -81,6 +81,7 @@ export class SequelizeResolver extends FabrixResolver {
 
     // Add a copy of the Fabrix app to the connection model
     this._sequelizeModel.app = this.app
+    // this._sequelizeModel.model = this.model
 
     // A helpful exposure of the instance of Sequelize being used
     this._sequelize = this._sequelizeModel.sequelize
@@ -104,7 +105,7 @@ export class SequelizeResolver extends FabrixResolver {
     this._sequelizeModel.prototype.app = this.app
 
     // Attach Fabrix Model to the instance prototype
-    this._sequelizeModel.prototype.model = this.model
+    this._sequelizeModel.prototype.resolver = this
 
     // Add this model to the connection.models for use later
     this._connection.models[modelName] = this._sequelizeModel
