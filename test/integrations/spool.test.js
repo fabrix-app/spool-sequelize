@@ -69,8 +69,8 @@ describe('Spool', () => {
 
   it('instance should have access to model', (done) => {
     const instance = global.app.models.testModel.build({name: 'test'})
-    assert.ok(instance.model)
-    assert.equal(instance.model, global.app.models.testModel)
+    assert.ok(instance.resolver)
+    assert.equal(instance.resolver, global.app.models.testModel.resolver)
     done()
   })
 
