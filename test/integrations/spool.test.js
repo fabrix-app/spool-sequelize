@@ -46,6 +46,13 @@ describe('Spool', () => {
     done()
   })
 
+  it('should be able to log a model through winston', (done) => {
+    const instance = global.app.models.testModel.build({name: 'test'})
+    assert.ok(instance)
+    global.app.log.debug('WINSTON WORKS', instance)
+    done()
+  })
+
 
   it('should access an inherited instanceLevelMethod', (done) => {
     const instance = global.app.models.testModelExtend2.build({name: 'test'})
