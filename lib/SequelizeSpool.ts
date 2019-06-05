@@ -72,7 +72,7 @@ export class SequelizeSpool extends DatastoreSpool {
    */
   configure() {
     // This set tracks the plugins that are being added to a single sequelize instance
-    this._datastore['plugins'] = this._datastore['plugins'] || new Set()
+    this._datastore['plugins'] = this._datastore['plugins'] || new Map([['plugins', new Set()]])
 
     this._plugins = Transformer.getPlugins(this.app)
     // Holds a collection of the connections made through Sequelize

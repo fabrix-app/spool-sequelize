@@ -8,6 +8,7 @@ export class SequelizeResolver extends FabrixResolver {
   private _schema
   private _sequelize
   private _sequelizeModel
+  private _plugins
 
   constructor (model: FabrixModel, datastore?: Sequelize) {
     super(model)
@@ -35,6 +36,10 @@ export class SequelizeResolver extends FabrixResolver {
 
   get sequelize() {
     return this._sequelize
+  }
+
+  get plugins() {
+    return this._sequelize ? this._sequelize.plugins : new Set()
   }
 
   /**

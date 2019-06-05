@@ -22,13 +22,36 @@ describe('Spool', () => {
       })
   })
 
-  it('should be able to access the datastore service', (done) => {
+  it('should be able to access the datastore service on model 1', (done) => {
     assert(global.app.models.testModel.resolver.datastore)
     assert(global.app.models.testModel.resolver.sequelize)
     assert(global.app.models.testModel.datastore)
     assert(global.app.models.testModel.sequelize)
     assert.equal(global.app.models.testModel.sequelize, global.app.models.testModel.resolver.sequelize)
     assert.equal(global.app.models.testModel.instance, global.app.models.testModel.resolver.sequelizeModel)
+    assert(global.app.models.testModel.resolver.plugins)
+    done()
+  })
+
+  it('should be able to access the datastore service on model 2', (done) => {
+    assert(global.app.models.testModel2.resolver.datastore)
+    assert(global.app.models.testModel2.resolver.sequelize)
+    assert(global.app.models.testModel2.datastore)
+    assert(global.app.models.testModel2.sequelize)
+    assert.equal(global.app.models.testModel2.sequelize, global.app.models.testModel2.resolver.sequelize)
+    assert.equal(global.app.models.testModel2.instance, global.app.models.testModel2.resolver.sequelizeModel)
+    assert(global.app.models.testModel2.resolver.plugins)
+    done()
+  })
+
+  it('should be able to access the datastore service on model 3', (done) => {
+    assert(global.app.models.testModel3.resolver.datastore)
+    assert(global.app.models.testModel3.resolver.sequelize)
+    assert(global.app.models.testModel3.datastore)
+    assert(global.app.models.testModel3.sequelize)
+    assert.equal(global.app.models.testModel3.sequelize, global.app.models.testModel3.resolver.sequelize)
+    assert.equal(global.app.models.testModel3.instance, global.app.models.testModel3.resolver.sequelizeModel)
+    assert(global.app.models.testModel3.resolver.plugins)
     done()
   })
 

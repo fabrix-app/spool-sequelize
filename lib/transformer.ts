@@ -202,18 +202,15 @@ export const Transformer = {
 
   definePlugins(app: FabrixApp, store_config = {}, plugins = {}) {
     const global_plugins = Object.keys(plugins)
-    const store_plugins = Object.keys(store_config).filter(n => {
-      if (global_plugins.indexOf(n) === -1) {
-        return n
-      }
-    })
+    const store_plugins = Object.keys(store_config)
     const plugs = new Map()
 
     global_plugins.forEach(n => {
       plugs.set(n, plugins[n])
     })
+
     store_plugins.forEach(n => {
-      plugs.set(n, plugins[n])
+      plugs.set(n, store_config[n])
     })
 
     return plugs
@@ -221,10 +218,14 @@ export const Transformer = {
 
   /**
    * Create Sequelize object based on config options
-   * @param  {Object} app.config.store
+   * @param {FabrixApp} app
+   * @param {Sequelize} sequelize
+   * @param {String} name
+   * @param  {Object} config from config.stores<n>
+   * @param {Object} plugins global plugins from config.sequelize
    * @return {Sequelize} Sequelize instance
    */
-  createConnectionsFromConfig (app: FabrixApp, sequelize, config: {[key: string]: any}, plugins: {[key: string]: any} = {}) {
+  createConnectionsFromConfig (app: FabrixApp, sequelize, name, config: {[key: string]: any}, plugins: {[key: string]: any} = {}) {
     const logger = function(val) {
       // https://github.com/sequelize/sequelize/issues/3781#issuecomment-421282703
       // If for whatever reason the Sequelize logger exports a Sequelize object, then, this must be done
@@ -236,11 +237,22 @@ export const Transformer = {
 
     const plugs: Map<string, any> = Transformer.definePlugins(app, config.plugins, plugins)
 
+    // Resolve or Define Connection plugin namespace
+    if (!sequelize.plugins.has(name)) {
+      sequelize.plugins.set(name, new Set())
+    }
+
     // Make a copy so plugins don't collide on multiple stores
     let Seq = sequelize
 
+    // Quick check to see if sequelize is already started
+    if (Seq instanceof sequelize) {
+      throw new Error('Sequelize is already initialized and cannot be loaded again, check your plugins')
+    }
+
+    // For each of the defined plugs
     plugs.forEach((plug, key, map) => {
-      if (!sequelize.plugins.has(key)) {
+      if (!sequelize.plugins.get('plugins').has(key) && !sequelize.plugins.get(name).has(key)) {
         try {
           if (typeof plug === 'function') {
             Seq = plug(Seq)
@@ -251,10 +263,12 @@ export const Transformer = {
           else {
             app.log.debug(`Transformer: ${key} ${plug} was not a function or Fabrix sequelize object`)
           }
-          sequelize.plugins.add(key)
+          sequelize.plugins.get('plugins').add(key)
+          sequelize.plugins.get(name).add(key)
         }
         catch (err) {
-          app.log.error(err)
+          console.log('BRK err', err)
+          app.log.error(`${key} plugin threw an error:`, err)
         }
       }
       else {
@@ -262,41 +276,34 @@ export const Transformer = {
       }
     })
 
-    // // Add plugins
-    // plugs.forEach((plug: any) => {
-    //   try {
-    //     if (typeof plug === 'function') {
-    //       Seq = plug(Seq)
-    //     }
-    //     else if (typeof plug === 'object' && plug.func && plug.config) {
-    //       Seq = plug.func(Seq, plug.config)
-    //     }
-    //     else {
-    //       app.log.debug(`Transformer: ${plug} was not a function or Fabrix sequelize object`)
-    //     }
-    //   }
-    //   catch (err) {
-    //     app.log.error(err)
-    //   }
-    // })
+    // Log out that the plugins were added
+    app.log.silly(`${ Array.from(sequelize.plugins.get(name))} installed on connection`)
 
+    // Based on the config, initialize the sequelize instance
     if (config.uri) {
       // Sequelize modify options object
-      return new Seq(config.uri, Object.assign({}, { logging: logger }, config))
+      Seq = new Seq(config.uri, Object.assign({}, { logging: logger }, config))
     }
     else {
-      return new Seq(
+      Seq = new Seq(
         config.database,
         config.username || process.env.POSTGRES_USER,
         config.password || process.env.POSTGRES_PASSWORD,
+        // Sequelize modify options object
         Object.assign({}, { logging: logger }, config)
       )
     }
+
+    // A handy way to see what plugins are loaded on the connection instance added to the resolver
+    Seq.plugins = sequelize.plugins.get(name)
+
+    return Seq
   },
 
   /**
 	 * Pick only Sequelize SQL stores from app config
 	 */
+  // TODO, this is too greedy, it should likely just grab stores that define the orm.sequelize
   pickStores (stores): {[key: string]: any} {
     return pickBy(stores, (_store, name) => {
       return ((_store.dialect && isString(_store.dialect) && _store.orm === 'sequelize')
@@ -326,7 +333,7 @@ export const Transformer = {
     const stores = Transformer.pickStores(app.config.get('stores'))
     const _sequelize = {}
     Object.keys(stores).forEach(key => {
-      _sequelize[key] = Transformer.createConnectionsFromConfig(app, sequelize, stores[key], plugins)
+      _sequelize[key] = Transformer.createConnectionsFromConfig(app, sequelize, key, stores[key], plugins)
       _sequelize[key].fabrixApp = app
       _sequelize[key].migrate = stores[key].migrate
       _sequelize[key].models = {}
