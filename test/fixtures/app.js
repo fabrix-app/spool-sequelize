@@ -7,6 +7,7 @@ const testModel2 = require('./testmodel2')
 const testModel3 = require('./testmodel3')
 const testModelExtend = require('./testmodelExtend')
 const testModelExtend2 = require('./testmodelExtend2')
+const winston = require('winston')
 
 const SequelizeResolver = require('../../dist/index').SequelizeResolver
 
@@ -210,6 +211,7 @@ const App = {
   config: {
     main: {
       spools: [
+        require('@fabrix/spool-winston').WinstonSpool,
         require('@fabrix/spool-router').RouterSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,
         require('../../dist/index').SequelizeSpool // spool-sequelize
@@ -217,7 +219,8 @@ const App = {
     },
     sequelize: {
       plugins: {
-        test_global: require('./testPlugin')
+        test_global: require('./testPlugin'),
+        test_duplicate: require('./testPlugin'),
       }
     },
     stores: {
@@ -232,7 +235,8 @@ const App = {
           test_local_config: {
             func: require('./testPlugin2'),
             config: {}
-          }
+          },
+          test_duplicate: require('./testPlugin'),
         }
       },
       storeoverride: {
@@ -254,6 +258,16 @@ const App = {
       Override: {
         tableName: 'override'
       }
+    },
+    log: {
+      level: 'silly',
+      exitOnError: false,
+      transports: [
+        new winston.transports.Console({
+          prettyPrint: true,
+          colorize: true
+        })
+      ]
     }
   }
 }

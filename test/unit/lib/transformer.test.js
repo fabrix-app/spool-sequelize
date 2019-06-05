@@ -16,6 +16,7 @@ describe('lib.Transformer', () => {
       const connections = lib.Transformer.getConnections(app, Sequelize, plugins)
       const models = lib.Transformer.getModels(app, Sequelize, connections)
       assert.ok(plugins)
+      assert.equal(Sequelize.prototype.helloWorld(), 'hello world')
     })
   })
 

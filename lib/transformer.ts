@@ -207,16 +207,15 @@ export const Transformer = {
         return n
       }
     })
-    const plugs = [
-      ...global_plugins.map(n => {
-        app.log.debug(`Defining Global Sequelize Plugin ${n}`)
-        return plugins[n]
-      }),
-      ...store_plugins.map(n => {
-        app.log.debug(`Defining Local Sequelize Plugin ${n}`)
-        return store_config[n]
-      })
-    ]
+    const plugs = new Map()
+
+    global_plugins.forEach(n => {
+      plugs.set(n, plugins[n])
+    })
+    store_plugins.forEach(n => {
+      plugs.set(n, plugins[n])
+    })
+
     return plugs
   },
 
@@ -226,31 +225,60 @@ export const Transformer = {
    * @return {Sequelize} Sequelize instance
    */
   createConnectionsFromConfig (app: FabrixApp, sequelize, config: {[key: string]: any}, plugins: {[key: string]: any} = {}) {
-    const logger = function(str) {
-      app.log.debug(str)
+    const logger = function(val) {
+      // https://github.com/sequelize/sequelize/issues/3781#issuecomment-421282703
+      // If for whatever reason the Sequelize logger exports a Sequelize object, then, this must be done
+      if (val && val.toJSON && typeof val.toJSON === 'function') {
+        val = val.toJSON()
+      }
+      app.log.debug(val)
     }
-    const plugs = Transformer.definePlugins(app, config.plugins, plugins)
+
+    const plugs: Map<string, any> = Transformer.definePlugins(app, config.plugins, plugins)
 
     // Make a copy so plugins don't collide on multiple stores
     let Seq = sequelize
 
-    // Add plugins
-    plugs.forEach((plug: any) => {
-      try {
-        if (typeof plug === 'function') {
-          Seq = plug(Seq)
+    plugs.forEach((plug, key, map) => {
+      if (!sequelize.plugins.has(key)) {
+        try {
+          if (typeof plug === 'function') {
+            Seq = plug(Seq)
+          }
+          else if (typeof plug === 'object' && plug.func && plug.config) {
+            Seq = plug.func(Seq, plug.config)
+          }
+          else {
+            app.log.debug(`Transformer: ${key} ${plug} was not a function or Fabrix sequelize object`)
+          }
+          sequelize.plugins.add(key)
         }
-        else if (typeof plug === 'object' && plug.func && plug.config) {
-          Seq = plug.func(Seq, plug.config)
-        }
-        else {
-          app.log.debug(`Transformer: ${plug} was not a function or Fabrix sequelize object`)
+        catch (err) {
+          app.log.error(err)
         }
       }
-      catch (err) {
-        app.log.error(err)
+      else {
+        app.log.debug(`Attempted to add ${ key } as a sequelize instance plugin more than once`)
       }
     })
+
+    // // Add plugins
+    // plugs.forEach((plug: any) => {
+    //   try {
+    //     if (typeof plug === 'function') {
+    //       Seq = plug(Seq)
+    //     }
+    //     else if (typeof plug === 'object' && plug.func && plug.config) {
+    //       Seq = plug.func(Seq, plug.config)
+    //     }
+    //     else {
+    //       app.log.debug(`Transformer: ${plug} was not a function or Fabrix sequelize object`)
+    //     }
+    //   }
+    //   catch (err) {
+    //     app.log.error(err)
+    //   }
+    // })
 
     if (config.uri) {
       // Sequelize modify options object
