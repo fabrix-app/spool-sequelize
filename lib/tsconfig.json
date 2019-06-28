@@ -10,6 +10,8 @@
     "declaration": true,
     "strict": false,
     "noImplicitAny": false,
+    "esModuleInterop": true,
+    "sourceMap": true,
     "typeRoots": [
       "node_modules/@types"
     ],

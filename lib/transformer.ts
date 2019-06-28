@@ -177,9 +177,16 @@ export const Transformer = {
   defineModel: (app: FabrixApp, sequelize, model: FabrixModel, connections) => {
     const modelName = model.constructor.name
     const modelConfig = model.config
-    const store = modelConfig.store || app.config.get('models.defaultStore')
+    const store = modelConfig.store
+      || app.config.get(`models.${modelName}.store`)
+      || app.config.get('models.defaultStore')
+
     const connection = connections[store]
-    const migrate = modelConfig.migrate || app.config.get('models.migrate') || connection.migrate
+    const migrate = modelConfig.migrate
+      || app.config.get(`models.${modelName}.migrate`)
+      || app.config.get('models.migrate')
+      || connection.migrate
+
     const options =  Transformer.getModelOptions(app, sequelize, model)
     const schema = Transformer.getModelSchema(app, sequelize, model)
 
