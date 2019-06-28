@@ -255,40 +255,13 @@ export const Transformer = {
       throw new Error('Sequelize is already initialized and cannot be loaded again, check your plugins')
     }
 
-    Array.from(plugs).reduce(function(accumulator, key, index, array) {
-      const plug: any = array[index]
-
-      app.log.debug(`Resolving ${key} on ${name}...`)
-
-      if (!sequelize.plugins.get('plugins').has(key) && !sequelize.plugins.get(name).has(key)) {
-        try {
-          if (typeof plug === 'function') {
-            Seq = plug(Seq)
-          }
-          else if (typeof plug === 'object' && plug.func && plug.config) {
-            Seq = plug.func(Seq, plug.config)
-          }
-          else {
-            app.log.debug(`Transformer: ${key} ${plug} was not a function or Fabrix sequelize object`)
-          }
-          sequelize.plugins.get('plugins').add(key)
-          sequelize.plugins.get(name).add(key)
-        }
-        catch (err) {
-          console.log('BRK err', err)
-          app.log.error(`${key} plugin threw an error:`, err)
-        }
-      }
-      else {
-        app.log.debug(`Attempted to add ${ key } as a sequelize instance plugin more than once`)
-      }
-
-      return accumulator + 1
-    }, 0)
-
-    // // For each of the defined plugs
-    // plugs.forEach((plug, key, map) => {
+    // console.log('BRK HERE', name)
+    // Array.from(plugs).reduce(function(accumulator, val, index, array) {
+    //   const plug: any = array[index]
+    //   const key: string =
+    //
     //   app.log.debug(`Resolving ${key} on ${name}...`)
+    //
     //   if (!sequelize.plugins.get('plugins').has(key) && !sequelize.plugins.get(name).has(key)) {
     //     try {
     //       if (typeof plug === 'function') {
@@ -311,7 +284,36 @@ export const Transformer = {
     //   else {
     //     app.log.debug(`Attempted to add ${ key } as a sequelize instance plugin more than once`)
     //   }
-    // })
+    //
+    //   return accumulator + 1
+    // }, 0)
+
+    // For each of the defined plugs
+    plugs.forEach((plug, key, map) => {
+      app.log.debug(`Resolving ${key} on ${name}...`)
+      if (!sequelize.plugins.get('plugins').has(key) && !sequelize.plugins.get(name).has(key)) {
+        try {
+          if (typeof plug === 'function') {
+            Seq = plug(Seq)
+          }
+          else if (typeof plug === 'object' && plug.func && plug.config) {
+            Seq = plug.func(Seq, plug.config)
+          }
+          else {
+            app.log.debug(`Transformer: ${key} ${plug} was not a function or Fabrix sequelize object`)
+          }
+          sequelize.plugins.get('plugins').add(key)
+          sequelize.plugins.get(name).add(key)
+        }
+        catch (err) {
+          console.log('BRK err', err)
+          app.log.error(`${key} plugin threw an error:`, err)
+        }
+      }
+      else {
+        app.log.debug(`Attempted to add ${ key } as a sequelize instance plugin more than once`)
+      }
+    })
 
     // Log out that the plugins were added
     app.log.silly(`${ Array.from(sequelize.plugins.get(name))} installed on connection`)
