@@ -1,4 +1,4 @@
-import * as joi from 'joi'
+import joi from 'joi'
 import { Schemas } from './schemas'
 
 export const Validator = {
