@@ -4,7 +4,8 @@ module.exports = function(Sequelize, config) {
   }
 
   if (Sequelize.prototype.helloEarth) {
-    throw new Error('PLUGIN WAS DOUBLED LOADED')
+    console.log('testPlugin2 Broke!', Sequelize.prototype.helloEarth)
+    throw new Error('TEST PLUGIN 2 WAS DOUBLED LOADED')
   }
   Sequelize.prototype.helloEarth = function() {
     return 'hello earth'
