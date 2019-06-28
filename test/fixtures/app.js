@@ -256,7 +256,8 @@ const App = {
       defaultStore: 'teststore',
       migrate: 'drop',
       Override: {
-        tableName: 'override'
+        tableName: 'override',
+        store: 'storeoverride'
       }
     },
     log: {

@@ -1,6 +1,6 @@
 import { DatastoreSpool } from '@fabrix/fabrix/dist/common/spools/datastore'
 
-import * as Sequelize from 'sequelize'
+import Sequelize from 'sequelize'
 
 import { Validator } from './validator'
 import { Transformer } from './transformer'

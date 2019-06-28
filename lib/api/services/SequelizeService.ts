@@ -1,6 +1,6 @@
 import { FabrixService as Service } from '@fabrix/fabrix/dist/common'
 import { defaults, omitBy, isArray, isObject, isString, isNil } from 'lodash'
-import * as merge from 'merge-options'
+import merge from 'merge-options'
 
 export class SequelizeService extends Service {
   /**
