@@ -212,6 +212,7 @@ const App = {
     main: {
       spools: [
         require('@fabrix/spool-winston').WinstonSpool,
+        require('@fabrix/spool-errors').ErrorsSpool,
         require('@fabrix/spool-router').RouterSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,
         require('../../dist/index').SequelizeSpool // spool-sequelize

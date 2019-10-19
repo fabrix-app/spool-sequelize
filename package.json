@@ -3,6 +3,7 @@
   "version": "1.6.17",
   "description": "Spool - Datastore Spool for Sequelize.js http://sequelizejs.com",
   "scripts": {
+    "release": "standard-version",
     "build": "tsc -p ./lib/tsconfig.release.json",
     "lint": "tslint -p ./lib",
     "watch": "tsc -w -p ./lib/tsconfig.release.json",
@@ -57,9 +58,10 @@
     "sequelize": "4.43.0"
   },
   "devDependencies": {
-    "@fabrix/fabrix": "^1.6.3",
+    "@fabrix/fabrix": "^1.6.4",
     "@fabrix/lint": "^1.0.0-alpha.3",
-    "@fabrix/spool-router": "^1.6.0",
+    "@fabrix/spool-router": "^1.6.4",
+    "@fabrix/spool-errors": "^1.6.1",
     "@fabrix/spool-tapestries": "^1.6.0",
     "@fabrix/spool-winston": "^1.6.0",
     "@types/lodash": "^4.14.109",
@@ -70,15 +72,22 @@
     "pg": "^6.4.2",
     "smokesignals": "^3",
     "sqlite3": "^4.0.9",
+    "source-map-support": "^0.5.13",
+    "standard-version": "^7.0.0",
+    "supertest": "^3.3.0",
     "tslib": "~1.9.0",
     "tslint": "~5.14.0",
     "tslint-microsoft-contrib": "~6.1.0",
     "tsutils": "~3.9.1",
-    "typescript": "~3.3.4000"
+    "typedoc": "^0.15.0",
+    "typedoc-plugin-markdown": "^1.2.0",
+    "typescript": "~3.3.4000",
+    "typescript-closure-compiler": "^1.8.11"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.6.3",
-    "@fabrix/spool-router": "^1.6.0"
+    "@fabrix/fabrix": "^1.6.4",
+    "@fabrix/spool-router": "^1.6.4",
+    "@fabrix/spool-errors": "^1.6.1"
   },
   "engines": {
     "node": ">= 7.6.0"
