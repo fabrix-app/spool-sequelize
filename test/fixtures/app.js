@@ -212,11 +212,13 @@ const App = {
     main: {
       spools: [
         require('@fabrix/spool-winston').WinstonSpool,
+        require('@fabrix/spool-errors').ErrorsSpool,
         require('@fabrix/spool-router').RouterSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,
         require('../../dist/index').SequelizeSpool // spool-sequelize
       ]
     },
+    // Globally configure plugins for all sequelize stores
     sequelize: {
       plugins: {
         test_global: require('./testPlugin'),
@@ -230,6 +232,7 @@ const App = {
         database: 'Sequelize',
         host: '127.0.0.1',
         dialect: 'postgres',
+        // Add plugins to just this store
         plugins: {
           test_local: require('./testPlugin'),
           test_local_config: {

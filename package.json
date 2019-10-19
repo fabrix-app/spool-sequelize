@@ -54,19 +54,20 @@
     "joi": "^14.3.1",
     "lodash": "^4.17.11",
     "merge-options": "^1.0.1",
-    "sequelize": "5.9.0"
+    "sequelize": "5.9.2"
   },
   "devDependencies": {
-    "@fabrix/fabrix": "^1.6.3",
+    "@fabrix/fabrix": "^1.6.4",
     "@fabrix/lint": "^1.0.0-alpha.3",
-    "@fabrix/spool-router": "^1.6.2",
+    "@fabrix/spool-router": "^1.6.4",
+    "@fabrix/spool-errors": "^1.6.1",
     "@fabrix/spool-tapestries": "^1.6.0",
     "@fabrix/spool-winston": "^1.6.0",
     "@types/lodash": "^4.14.109",
     "@types/node": "~10.3.4",
     "mocha": "^6",
     "nyc": "^14.1.1",
-    "pg": "^7.8.1",
+    "pg": "^7.11.0",
     "smokesignals": "^3",
     "sqlite3": "^4.0.9",
     "tslib": "~1.9.0",
@@ -76,8 +77,9 @@
     "typescript": "~3.3.4000"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.6.3",
-    "@fabrix/spool-router": "^1.6.0"
+    "@fabrix/fabrix": "^1.6.4",
+    "@fabrix/spool-router": "^1.6.4",
+    "@fabrix/spool-errors": "^1.6.0"
   },
   "engines": {
     "node": ">= 7.6.0"
