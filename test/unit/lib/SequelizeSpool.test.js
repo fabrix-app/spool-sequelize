@@ -4,6 +4,7 @@ const assert = require('assert')
 const FabrixApp = require('@fabrix/fabrix').FabrixApp
 const SequelizeSpool = require('../../../dist/index').SequelizeSpool
 const RouterSpool = require('@fabrix/spool-router').RouterSpool
+const ErrorsSpool = require('@fabrix/spool-errors').ErrorsSpool
 
 describe('app.spools.SequelizeSpool', () => {
   let app
@@ -25,7 +26,8 @@ describe('app.spools.SequelizeSpool', () => {
       app = new FabrixApp({pkg: {}, config: {
         main: {
           spools: [
-            RouterSpool
+            RouterSpool,
+            ErrorsSpool
           ]
         }
       }, api: {}})

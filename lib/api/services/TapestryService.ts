@@ -1,10 +1,13 @@
 import { FabrixService as Service } from '@fabrix/fabrix/dist/common'
 import { isPlainObject, isArray, find, defaultsDeep, extend, defaults } from 'lodash'
-import { ModelError } from '../../errors'
+import { FabrixApp } from '@fabrix/fabrix'
 
-const manageError = err => {
+const manageError = (app: FabrixApp, err) => {
   if (err.name === 'SequelizeValidationError') {
-    return Promise.reject(new ModelError('E_VALIDATION', err.message, err.errors))
+    return Promise.reject(new app.errors.SequelizeModelError(
+      'E_VALIDATION',
+      err.message, err.errors
+    ))
   }
   return Promise.reject(err)
 }
@@ -52,12 +55,14 @@ export class TapestryService extends Service {
     const Model = this._getModel(modelName)
     const modelOptions = defaultsDeep({}, options, this.app.config.get('tapestries.models.options'))
     if (!Model) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError('E_NOT_FOUND', `${modelName} can't be found`))
     }
     if (modelOptions.populate) {
       modelOptions.include = this._createIncludeField(Model, modelOptions.populate)
     }
-    return Model.create(values, modelOptions).catch(manageError)
+    return Model
+      .create(values, modelOptions)
+      .catch(err => manageError(this.app, err))
   }
 
   _createIncludeField(model, populate) {
@@ -92,7 +97,7 @@ export class TapestryService extends Service {
     const modelOptions = defaultsDeep({}, options, this.app.config.get('tapestries.models.options'))
     let query
     if (!Model) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError('E_NOT_FOUND', `${modelName} can't be found`))
     }
     if (modelOptions.populate) {
       modelOptions.include = this._createIncludeField(Model, modelOptions.populate)
@@ -126,7 +131,7 @@ export class TapestryService extends Service {
       query = Model.findAll(defaults(criteria, modelOptions))
     }
 
-    return query.catch(manageError)
+    return query.catch(err => manageError(this.app, err))
   }
 
   /**
@@ -144,7 +149,7 @@ export class TapestryService extends Service {
   update(modelName, criteria, values, options: {[key: string]: any} = {}) {
     const Model = this._getModel(modelName)
     if (!Model) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError('E_NOT_FOUND', `${modelName} can't be found`))
     }
     let query
     if (!criteria) {
@@ -172,7 +177,7 @@ export class TapestryService extends Service {
       query = Model.update(values, extend(criteria, options))
     }
 
-    return query.catch(manageError)
+    return query.catch(err => manageError(this.app, err))
   }
 
   /**
@@ -187,7 +192,7 @@ export class TapestryService extends Service {
     const Model = this._getModel(modelName)
     let query
     if (!Model) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${modelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError('E_NOT_FOUND', `${modelName} can't be found`))
     }
 
     if (isArray(options.populate) || isPlainObject(options.populate)) {
@@ -214,7 +219,7 @@ export class TapestryService extends Service {
       query = Model.destroy(extend(criteria, options)).then(results => results[0])
     }
 
-    return query.catch(manageError)
+    return query.catch(err => manageError(this.app, err))
   }
 
   /**
@@ -230,11 +235,14 @@ export class TapestryService extends Service {
   createAssociation(parentModelName, parentId, childAttributeName, values, options) {
     const parentModel = this._getModel(parentModelName)
     if (!parentModel) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${parentModelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError('E_NOT_FOUND', `${parentModelName} can't be found`))
     }
     const association = parentModel.associations[childAttributeName]
     if (!association) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${parentModelName}'s association ${childAttributeName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError(
+        'E_NOT_FOUND',
+        `${parentModelName}'s association ${childAttributeName} can't be found`
+      ))
     }
     const childModelName = association.target.name
     const childModel = this._getModel(childModelName)
@@ -283,16 +291,22 @@ export class TapestryService extends Service {
   findAssociation(parentModelName, parentId, childAttributeName, criteria, options) {
     const parentModel = this._getModel(parentModelName)
     if (!parentModel) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${parentModelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError(
+        'E_NOT_FOUND',
+        `${parentModelName} can't be found`
+      ))
     }
     const association = parentModel.associations[childAttributeName]
     if (!association) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${parentModelName}'s association ${childAttributeName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError(
+        'E_NOT_FOUND',
+        `${parentModelName}'s association ${childAttributeName} can't be found`
+      ))
     }
     const childModelName = association.target.name
     const childModel = this._getModel(childModelName)
     if (!childModel) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${childModelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError('E_NOT_FOUND', `${childModelName} can't be found`))
     }
 
     // Used for things like hasMany
@@ -327,7 +341,7 @@ export class TapestryService extends Service {
             ]
           }
         }, options)))
-        .catch(manageError)
+        .catch(err => manageError(this.app, err))
     }
     // Used for things like belongsTo
     else {
@@ -351,16 +365,25 @@ export class TapestryService extends Service {
   updateAssociation(parentModelName, parentId, childAttributeName, criteria, values, options) {
     const parentModel = this._getModel(parentModelName)
     if (!parentModel) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${parentModelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError(
+        'E_NOT_FOUND',
+        `${parentModelName} can't be found`
+      ))
     }
     const association = parentModel.associations[childAttributeName]
     if (!association) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${parentModelName}'s association ${childAttributeName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError(
+        'E_NOT_FOUND',
+        `${parentModelName}'s association ${childAttributeName} can't be found`
+      ))
     }
     const childModelName = association.target.name
     const childModel = this._getModel(childModelName)
     if (!childModel) {
-      return Promise.reject(new ModelError('E_NOT_FOUND', `${childModelName} can't be found`))
+      return Promise.reject(new this.app.errors.SequelizeModelError(
+        'E_NOT_FOUND',
+        `${childModelName} can't be found`
+      ))
     }
 
     // Used for things like hasMany
@@ -396,7 +419,7 @@ export class TapestryService extends Service {
             ]
           }
         }, options)))
-        .catch(manageError)
+        .catch(err => manageError(this.app, err))
     }
     // Used for things like belongsTo
     else {
@@ -439,6 +462,6 @@ export class TapestryService extends Service {
           return record.destroy()
         }))
       })
-      .catch(manageError)
+      .catch(err => manageError(this.app, err))
   }
 }
