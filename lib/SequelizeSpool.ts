@@ -45,10 +45,10 @@ export class SequelizeSpool extends DatastoreSpool {
    */
   async validate() {
 
-    const requiredSpools = ['router']
+    const requiredSpools = ['router', 'errors']
     const spools = Object.keys(this.app.spools)
 
-    if (!spools.some(v => requiredSpools.indexOf(v) >= 0)) {
+    if (!spools.some(v => requiredSpools.indexOf(v) !== -1)) {
       return Promise.reject(new Error(`spool-sequelize requires spools: ${ requiredSpools.join(', ') }!`))
     }
 
@@ -105,5 +105,12 @@ export class SequelizeSpool extends DatastoreSpool {
   async migrate() {
     const SchemaMigrationService = this.app.services.SchemaMigrationService as TSchemaMigrationService
     return SchemaMigrationService.migrateDB(this.connections)
+  }
+
+  /**
+   * Make sure everything is configured correctly
+   */
+  async sanity() {
+    return Promise.resolve()
   }
 }

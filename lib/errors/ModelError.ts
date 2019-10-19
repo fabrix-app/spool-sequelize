@@ -1,3 +1,4 @@
+
 export class ModelError extends Error {
   public statusCode
   public code
