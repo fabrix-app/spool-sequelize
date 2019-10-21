@@ -17,7 +17,7 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
         beforeValidate: 0
       })
         .then(record => {
-          assert.equal(record.beforeCreate, 1)
+          assert.strictEqual(record.beforeCreate, 1)
         })
     })
   })
@@ -26,7 +26,7 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
       //TapestryService.destroy('ModelCallbacks',{})
       return TapestryService.create('ModelCallbacks', {name: 'fabrix_afterCreate', beforeValidate: 0, afterCreate: 0})
         .then(record => {
-          assert.equal(record.afterCreate, 1)
+          assert.strictEqual(record.afterCreate, 1)
         })
     })
   })
@@ -45,11 +45,11 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
           )
         })
         .then(records => {
-          assert.equal(records[0], 1)
+          assert.strictEqual(records[0], 1)
           return TapestryService.find('ModelCallbacks', {name: 'fabrix_UpdatedBefore'})
         })
         .then(records => {
-          assert.equal(records[0].beforeUpdate, 1)
+          assert.strictEqual(records[0].beforeUpdate, 1)
         })
     })
   })
@@ -66,13 +66,13 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
           )
         })
         .then(results => {
-          assert.equal(results[0], 1)
+          assert.strictEqual(results[0], 1)
           return TapestryService.find('ModelCallbacks', {
             name: 'fabrix_UpdatedAfter'
           })
         })
         .then(records => {
-          assert.equal(records[0].afterUpdate, 1)
+          assert.strictEqual(records[0].afterUpdate, 1)
         })
     })
   })
@@ -80,7 +80,7 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
     it('should create a record with a beforeValidate attribute', () => {
       return TapestryService.create('ModelCallbacks', {name: 'fabrix_beforeCreate', beforeValidate: 0})
         .then(record => {
-          assert.equal(record.beforeValidate, 1)
+          assert.strictEqual(record.beforeValidate, 1)
         })
     })
   })
@@ -92,7 +92,7 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
         afterValidate: 0
       })
         .then(record => {
-          assert.equal(record.afterValidate, 1)
+          assert.strictEqual(record.afterValidate, 1)
         })
     })
   })
@@ -106,7 +106,7 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
           return TapestryService.find('ModelCallbacks', {name: 'fabrix_beforeDestroy'})
         })
         .then(records => {
-          assert.equal(records.length, 0)
+          assert.strictEqual(records.length, 0)
         })
     })
   })
@@ -120,7 +120,7 @@ describe('lib.Transformer.SequelizeCallbacks', () => {
           return TapestryService.find('ModelCallbacks', {name: 'fabrix_afterDestroy'})
         })
         .then(records => {
-          assert.equal(records.length, 0)
+          assert.strictEqual(records.length, 0)
         })
     })
   })

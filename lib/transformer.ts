@@ -308,14 +308,9 @@ export const Transformer = {
   /**
 	 * Pick only Sequelize SQL stores from app config
 	 */
-  // TODO, this is too greedy, it should likely just grab stores that define the orm.sequelize
   pickStores (stores): {[key: string]: any} {
     return pickBy(stores, (_store, name) => {
-      return ((_store.dialect && isString(_store.dialect) && _store.orm === 'sequelize')
-        || startsWith(_store.uri, 'mysql://')
-        || startsWith(_store.uri, 'mysql://')
-        || startsWith(_store.uri, 'postgresql://')
-        || startsWith(_store.uri, 'sqlite://'))
+      return _store.orm === 'sequelize'
     })
   },
 
