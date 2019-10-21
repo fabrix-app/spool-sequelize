@@ -22,7 +22,7 @@ Sequelize is a SQL orm and this spool uses that to add power to Fabrix models.
 
 ```js
 // config/main.ts
-import { SeqquelizeSpool } from '@fabrix/spool-sequelize'
+import { SequelizeSpool } from '@fabrix/spool-sequelize'
 export const main = {
   // ...
   spools: [
@@ -31,7 +31,25 @@ export const main = {
 }
 ```
 
-A basic `config/store.ts` can be found here : https://github.com/fabrix-app/spool-sequelize/blob/master/lib/archetype/config/database.js
+A basic `config/store.ts` can be found here : https://github.com/fabrix-app/spool-sequelize/blob/master/archetype/config/stores.ts
+
+A basic `config/models.ts` can be found here : https://github.com/fabrix-app/spool-sequelize/blob/master/archetype/config/models.ts
+
+But generally, you can configure Sequelize similiarly to this:
+
+```js
+
+// config/stores.ts
+export const stores = {
+  myStoreName: {
+    orm: 'sequelize', // <-- This is the property that spool-sequelize looks for when building connections 
+    // ... General Sequelize Configuration from the library's documentation
+  },
+  // ... Other Store configurations
+}
+
+```
+
 
 ### Plugins
 There are 2 ways to define a plugin for Sequelize in spool-sequelize, for all sequelize connections or just for a particular one:
@@ -140,6 +158,8 @@ export class CustomerResolver extends SequelizeResolver {
     this.findAll({ where: { happy: true} }, options)
   }
 }
+
+// NOTE: make sure to set CustomerResolver as the resolver on your Fabrix Model!
 ```
 Now you can use it.
 ```js
@@ -150,7 +170,7 @@ User.findHappy()
 ```
 
 
-For more informations about sequelize queries, please look at [the official documentation](http://docs.sequelizejs.com/en/latest/docs/querying/)
+For more information about sequelize queries, please look at [the official documentation](http://docs.sequelizejs.com/en/latest/docs/querying/)
 
 ## Tapestries query options
 Some options can be provide as query param for the `find` method, example `GET /api/v1/user`.
