@@ -22,9 +22,9 @@ describe('api.services.SequelizeService', () => {
     }, {
       include: [{ model: 'world'}]
     })
-    assert.equal(newOptions.include.length, 2)
-    assert.equal(newOptions.include[0].model, 'hello')
-    assert.equal(newOptions.include[1].model, 'world')
+    assert.strictEqual(newOptions.include.length, 2)
+    assert.strictEqual(newOptions.include[0].model, 'hello')
+    assert.strictEqual(newOptions.include[1].model, 'world')
     done()
   })
   it('should merge duplicate includes', (done) => {
@@ -33,8 +33,8 @@ describe('api.services.SequelizeService', () => {
     }, {
       include: [{ model: 'hello', as: 'world' }]
     })
-    assert.equal(newOptions.include.length, 1)
-    assert.equal(newOptions.include[0].model, 'hello')
+    assert.strictEqual(newOptions.include.length, 1)
+    assert.strictEqual(newOptions.include[0].model, 'hello')
     done()
   })
   it('should merge includes with same model', (done) => {
@@ -43,9 +43,9 @@ describe('api.services.SequelizeService', () => {
     }, {
       include: [{ model: 'hello', as: 'planet' }]
     })
-    assert.equal(newOptions.include.length, 2)
-    assert.equal(newOptions.include[0].model, 'hello')
-    assert.equal(newOptions.include[1].model, 'hello')
+    assert.strictEqual(newOptions.include.length, 2)
+    assert.strictEqual(newOptions.include[0].model, 'hello')
+    assert.strictEqual(newOptions.include[1].model, 'hello')
     done()
   })
   it('should merge order and fix incorrect instances', (done) => {
@@ -54,7 +54,7 @@ describe('api.services.SequelizeService', () => {
     }, {
       order: 'updated_at DESC'
     })
-    assert.equal(newOptions.order.length, 2)
+    assert.strictEqual(newOptions.order.length, 2)
     done()
   })
   it('should merge wheres', (done) => {
@@ -63,8 +63,8 @@ describe('api.services.SequelizeService', () => {
     }, {
       where: { created_at: 'now' }
     })
-    assert.equal(newOptions.where.name, 'hello')
-    assert.equal(newOptions.where.created_at, 'now')
+    assert.strictEqual(newOptions.where.name, 'hello')
+    assert.strictEqual(newOptions.where.created_at, 'now')
     done()
   })
   it('should merge wheres with operator symbol', (done) => {
@@ -76,19 +76,19 @@ describe('api.services.SequelizeService', () => {
           [sequelize.Op.in]: [1, 2, 3]
       }}
     })
-    assert.equal(newOptions.where.name[sequelize.Op.in][0], 1)
-    assert.equal(newOptions.where.name[sequelize.Op.in][1], 2)
-    assert.equal(newOptions.where.name[sequelize.Op.in][2], 3)
+    assert.strictEqual(newOptions.where.name[sequelize.Op.in][0], 1)
+    assert.strictEqual(newOptions.where.name[sequelize.Op.in][1], 2)
+    assert.strictEqual(newOptions.where.name[sequelize.Op.in][2], 3)
     done()
   })
-  
+
   it('should merge limit', (done) => {
     const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
       limit: null
     }, {
       limit: 10
     })
-    assert.equal(newOptions.limit, 10)
+    assert.strictEqual(newOptions.limit, 10)
     done()
   })
   it('should merge offset', (done) => {
@@ -97,14 +97,14 @@ describe('api.services.SequelizeService', () => {
     }, {
       offset: 10
     })
-    assert.equal(newOptions.offset, 10)
+    assert.strictEqual(newOptions.offset, 10)
     done()
   })
   it('should merge with unknown variables', (done) => {
     const newOptions = global.app.services.SequelizeService.mergeOptionDefaults({
       hello: 'world'
     }, {})
-    assert.equal(newOptions.hello, 'world')
+    assert.strictEqual(newOptions.hello, 'world')
     done()
   })
   it('should replace model with association object that match', (done) => {
@@ -113,8 +113,8 @@ describe('api.services.SequelizeService', () => {
     }, {
         include: [{ target: 'hello' }]
       })
-    assert.equal(newOptions.include.length, 1)
-    assert.equal(newOptions.include[0].target, 'hello')
+    assert.strictEqual(newOptions.include.length, 1)
+    assert.strictEqual(newOptions.include[0].target, 'hello')
     done()
   })
   it('should replace association object with model that match', (done) => {
@@ -123,8 +123,8 @@ describe('api.services.SequelizeService', () => {
     }, {
         include: [{ model: 'model' }]
     })
-    assert.equal(newOptions.include.length, 1)
-    assert.equal(newOptions.include[0].model, 'model')
+    assert.strictEqual(newOptions.include.length, 1)
+    assert.strictEqual(newOptions.include[0].model, 'model')
     done()
   })
 
@@ -134,8 +134,8 @@ describe('api.services.SequelizeService', () => {
     }, {
         include: [{ target: 'hello' }]
       })
-    assert.equal(newOptions.include.length, 1)
-    assert.equal(newOptions.include[0].target, 'hello')
+    assert.strictEqual(newOptions.include.length, 1)
+    assert.strictEqual(newOptions.include[0].target, 'hello')
     done()
   })
   it('should replace model with association prop that match', (done) => {
@@ -145,8 +145,8 @@ describe('api.services.SequelizeService', () => {
         include: [{ association: { target: 'hello' }}
       ]
       })
-    assert.equal(newOptions.include.length, 1)
-    assert.equal(newOptions.include[0].association.target, 'hello')
+    assert.strictEqual(newOptions.include.length, 1)
+    assert.strictEqual(newOptions.include[0].association.target, 'hello')
     done()
   })
   it('should replace association with model that match', (done) => {
@@ -155,8 +155,8 @@ describe('api.services.SequelizeService', () => {
     }, {
         include: [{ model: 'model' }]
     })
-    assert.equal(newOptions.include.length, 1)
-    assert.equal(newOptions.include[0].model, 'model')
+    assert.strictEqual(newOptions.include.length, 1)
+    assert.strictEqual(newOptions.include[0].model, 'model')
     done()
   })
   it('should merge includes when one uses model and another uses associate include formats', (done) => {
@@ -165,9 +165,9 @@ describe('api.services.SequelizeService', () => {
     }, {
       include: [{ model: 'world' }]
     })
-    assert.equal(newOptions.include.length, 2)
-    assert.equal(newOptions.include[0].association.target, 'hello')
-    assert.equal(newOptions.include[1].model, 'world')
+    assert.strictEqual(newOptions.include.length, 2)
+    assert.strictEqual(newOptions.include[0].association.target, 'hello')
+    assert.strictEqual(newOptions.include[1].model, 'world')
     done()
   })
   it('should replace model with association prop that match with multiple include objects', (done) => {
@@ -179,9 +179,9 @@ describe('api.services.SequelizeService', () => {
         {association: { target: 'hello' }}
       ]
     })
-    assert.equal(newOptions.include.length, 2)
-    assert.equal(newOptions.include[0].association.target, 'hello')
-    assert.equal(newOptions.include[1].model, 'world')
+    assert.strictEqual(newOptions.include.length, 2)
+    assert.strictEqual(newOptions.include[0].association.target, 'hello')
+    assert.strictEqual(newOptions.include[1].model, 'world')
     done()
   })
   it('should replace association with model that match with multiple include objects', (done) => {
@@ -193,9 +193,9 @@ describe('api.services.SequelizeService', () => {
     }, {
       include: [{ model: 'hello' }]
     })
-    assert.equal(newOptions.include.length, 2)
-    assert.equal(newOptions.include[0].model, 'world')
-    assert.equal(newOptions.include[1].model, 'hello')
+    assert.strictEqual(newOptions.include.length, 2)
+    assert.strictEqual(newOptions.include[0].model, 'world')
+    assert.strictEqual(newOptions.include[1].model, 'hello')
     done()
   })
 })
