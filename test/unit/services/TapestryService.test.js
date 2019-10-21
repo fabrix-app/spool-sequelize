@@ -16,34 +16,34 @@ describe('api.services.TapestryService', () => {
     it('should insert a record', () => {
       return TapestryService.create('Role', {name: 'createtest'})
         .then(role => {
-          assert.equal(role.name, 'createtest')
+          assert.strictEqual(role.name, 'createtest')
         })
     })
     it('should insert a record with child', () => {
       return TapestryService.create('User', {name: 'userTest', roles: [{name: 'roleTest'}]}, {populate: 'roles'})
         .then(user => {
-          assert.equal(user.name, 'userTest')
-          assert.equal(user.roles.length, 1)
-          assert.equal(user.roles[0].name, 'roleTest')
+          assert.strictEqual(user.name, 'userTest')
+          assert.strictEqual(user.roles.length, 1)
+          assert.strictEqual(user.roles[0].name, 'roleTest')
         })
     })
     it('should return a not found error', () => {
       return TapestryService.create('UnknownModel', {name: 'userTest'})
         .catch(err => {
-          assert.equal(err.code, 'E_NOT_FOUND')
-          assert.equal(err.message, 'UnknownModel can\'t be found')
-          assert.equal(err.name, 'Model error')
+          assert.strictEqual(err.code, 'E_NOT_FOUND')
+          assert.strictEqual(err.message, 'UnknownModel can\'t be found')
+          assert.strictEqual(err.name, 'Model error')
         })
     })
     it('should return a validation error', () => {
       return TapestryService.create('User', {roles: [{name: 'roleTest'}]}, {populate: 'roles'})
         .catch(err => {
-          assert.equal(err.code, 'E_VALIDATION')
-          assert.equal(err.message, 'notNull Violation: User.name cannot be null')
-          assert.equal(err.errors[0].path, 'name')
-          assert.equal(err.errors[0].message, 'User.name cannot be null')
-          assert.equal(err.errors[0].type, 'notNull Violation')
-          assert.equal(err.name, 'Model error')
+          assert.strictEqual(err.code, 'E_VALIDATION')
+          assert.strictEqual(err.message, 'notNull Violation: User.name cannot be null')
+          assert.strictEqual(err.errors[0].path, 'name')
+          assert.strictEqual(err.errors[0].message, 'User.name cannot be null')
+          assert.strictEqual(err.errors[0].type, 'notNull Violation')
+          assert.strictEqual(err.name, 'Model error')
         })
     })
   })
@@ -51,35 +51,35 @@ describe('api.services.TapestryService', () => {
     it('should find a single record', () => {
       return TapestryService.create('Role', {name: 'findtest'})
         .then(role => {
-          assert.equal(role.name, 'findtest')
+          assert.strictEqual(role.name, 'findtest')
           assert(role.id)
           return TapestryService.find('Role', role.id)
         })
         .then(role => {
           assert(!role.length)
-          assert.equal(role.dataValues.name, 'findtest')
+          assert.strictEqual(role.dataValues.name, 'findtest')
         })
     })
     it('should find a set of records', () => {
       return TapestryService.create('Role', {name: 'findtest'})
         .then(role => {
-          assert.equal(role.name, 'findtest')
+          assert.strictEqual(role.name, 'findtest')
           assert(role.id)
           return TapestryService.find('Role', {name: 'findtest'})
         })
         .then(roles => {
           assert(roles[0])
-          //assert.equal(roles.length, 1)
-          assert.equal(roles[0].name, 'findtest')
+          //assert.strictEqual(roles.length, 1)
+          assert.strictEqual(roles[0].name, 'findtest')
         })
     })
 
     it('should return a not found error', () => {
       return TapestryService.find('UnknowModel', {name: 'findtest'})
         .catch(err => {
-          assert.equal(err.code, 'E_NOT_FOUND')
-          assert.equal(err.message, 'UnknowModel can\'t be found')
-          assert.equal(err.name, 'Model error')
+          assert.strictEqual(err.code, 'E_NOT_FOUND')
+          assert.strictEqual(err.message, 'UnknowModel can\'t be found')
+          assert.strictEqual(err.name, 'Model error')
         })
     })
   })
@@ -87,7 +87,7 @@ describe('api.services.TapestryService', () => {
     it('should update a set of records', () => {
       return TapestryService.create('Role', {name: 'updatetest'})
         .then(role => {
-          assert.equal(role.name, 'updatetest')
+          assert.strictEqual(role.name, 'updatetest')
           assert(role.id)
           return TapestryService.update(
             'Role',
@@ -97,7 +97,7 @@ describe('api.services.TapestryService', () => {
         })
         .then(results => {
           assert(results[0])
-          assert.equal(results[0], 1)
+          assert.strictEqual(results[0], 1)
         })
     })
     it('should return a not found error', () => {
@@ -107,9 +107,9 @@ describe('api.services.TapestryService', () => {
         {name: 'updated'}
         )
         .catch(err => {
-          assert.equal(err.code, 'E_NOT_FOUND')
-          assert.equal(err.message, 'UnknowModel can\'t be found')
-          assert.equal(err.name, 'Model error')
+          assert.strictEqual(err.code, 'E_NOT_FOUND')
+          assert.strictEqual(err.message, 'UnknowModel can\'t be found')
+          assert.strictEqual(err.name, 'Model error')
         })
     })
   })
@@ -117,25 +117,25 @@ describe('api.services.TapestryService', () => {
     it('should delete a set of records', () => {
       return TapestryService.create('Role', {name: 'destroytest'})
         .then(role => {
-          assert.equal(role.name, 'destroytest')
+          assert.strictEqual(role.name, 'destroytest')
           assert(role.id)
           return TapestryService.destroy('Role', {name: 'destroytest'})
         })
         .then(nbRowDeleted => {
-          assert.equal(nbRowDeleted, 1)
+          assert.strictEqual(nbRowDeleted, 1)
           return TapestryService.find('Role', {name: 'destroytest'})
         })
         .then(roles => {
-          assert.equal(roles.length, 0)
+          assert.strictEqual(roles.length, 0)
         })
     })
 
     it('should return a not found error', () => {
       return TapestryService.destroy('UnknowModel', {name: 'destroy'})
         .catch(err => {
-          assert.equal(err.code, 'E_NOT_FOUND')
-          assert.equal(err.message, 'UnknowModel can\'t be found')
-          assert.equal(err.name, 'Model error')
+          assert.strictEqual(err.code, 'E_NOT_FOUND')
+          assert.strictEqual(err.message, 'UnknowModel can\'t be found')
+          assert.strictEqual(err.name, 'Model error')
         })
     })
   })
@@ -154,7 +154,7 @@ describe('api.services.TapestryService', () => {
         .then(page => {
           assert(page)
           assert(page.id)
-          assert.equal(page.dataValues.ProjectId, projectId)
+          assert.strictEqual(page.dataValues.ProjectId, projectId)
         })
     })
 
@@ -172,7 +172,7 @@ describe('api.services.TapestryService', () => {
         .then(role => {
           assert(role)
           assert(role.id)
-          assert.equal(role.dataValues.UserId, userId)
+          assert.strictEqual(role.dataValues.UserId, userId)
         })
     })
 
@@ -186,7 +186,7 @@ describe('api.services.TapestryService', () => {
           })
           .then(user => {
             return TapestryService.find('Page', page.id)
-              .then(page => assert.equal(page.dataValues.OwnerId, user.id))
+              .then(page => assert.strictEqual(page.dataValues.OwnerId, user.id))
           })
         })
     })
@@ -212,11 +212,11 @@ describe('api.services.TapestryService', () => {
           })
         })
         .then(userProjects => {
-          assert.equal(userProjects.length, 1)
+          assert.strictEqual(userProjects.length, 1)
           const userProject = userProjects[0]
           assert(userProject)
-          assert.equal(userProject.UserId, userId)
-          assert.equal(userProject.ProjectId, projectId)
+          assert.strictEqual(userProject.UserId, userId)
+          assert.strictEqual(userProject.ProjectId, projectId)
         })
     })
   })
@@ -235,14 +235,14 @@ describe('api.services.TapestryService', () => {
         .then(page => {
           assert(page)
           assert(page.id)
-          assert.equal(page.dataValues.ProjectId, projectId)
+          assert.strictEqual(page.dataValues.ProjectId, projectId)
           return TapestryService.findAssociation('Project', projectId, 'Page')
         })
         .then(pages => {
           const page = pages[0]
           assert(page)
           assert(page.id)
-          assert.equal(page.dataValues.ProjectId, projectId)
+          assert.strictEqual(page.dataValues.ProjectId, projectId)
         })
     })
 
@@ -266,7 +266,7 @@ describe('api.services.TapestryService', () => {
           const role = roles[0]
           assert(role)
           assert(role.id)
-          assert.equal(role.dataValues.UserId, userId)
+          assert.strictEqual(role.dataValues.UserId, userId)
         })
     })
 
@@ -285,7 +285,7 @@ describe('api.services.TapestryService', () => {
           assert(owner)
           assert(owner.id)
           return TapestryService.findAssociation('Page', pageId, 'Owner')
-            .then(user => assert.equal(user.id, owner.id))
+            .then(user => assert.strictEqual(user.id, owner.id))
         })
     })
 
@@ -304,7 +304,7 @@ describe('api.services.TapestryService', () => {
         })
         .then(userproject => {
           return TapestryService.findAssociation('Project', projectId, 'Users')
-            .then(users => assert.equal(users[0].id, userId))
+            .then(users => assert.strictEqual(users[0].id, userId))
         })
     })
 
@@ -346,7 +346,7 @@ describe('api.services.TapestryService', () => {
           return TapestryService.findAssociation('Project', projectId, 'Page')
         }).then(roles => {
           const role = roles[0]
-          assert.equal(role.dataValues.name, 'updateassociatedpage')
+          assert.strictEqual(role.dataValues.name, 'updateassociatedpage')
         })
     })
 
@@ -370,7 +370,7 @@ describe('api.services.TapestryService', () => {
           return TapestryService.findAssociation('User', userId, 'roles')
         }).then(roles => {
           const role = roles[0]
-          assert.equal(role.dataValues.name, 'updateassociatedrole')
+          assert.strictEqual(role.dataValues.name, 'updateassociatedrole')
         })
     })
 
@@ -391,7 +391,7 @@ describe('api.services.TapestryService', () => {
         .then(() => {
           return TapestryService.findAssociation('Page', pageId, 'Owner')
         })
-        .then(user => assert.equal(user.dataValues.name, 'updatedassociatedowner'))
+        .then(user => assert.strictEqual(user.dataValues.name, 'updatedassociatedowner'))
     })
 
     it('should work for belongsToMany', () => {
@@ -413,8 +413,8 @@ describe('api.services.TapestryService', () => {
           return TapestryService.findAssociation('Project', projectId, 'Users')
         })
         .then(users => {
-          assert.equal(users.length, 1)
-          assert.equal(users[0].dataValues.name, 'updatedassociateduser')
+          assert.strictEqual(users.length, 1)
+          assert.strictEqual(users[0].dataValues.name, 'updatedassociateduser')
         })
     })
   })
@@ -440,7 +440,7 @@ describe('api.services.TapestryService', () => {
           return TapestryService.find('User', userId, {populate: 'roles'})
         })
         .then(user => {
-          assert.equal(user.roles.length, 0)
+          assert.strictEqual(user.roles.length, 0)
         })
     })
   })
@@ -448,7 +448,7 @@ describe('api.services.TapestryService', () => {
     it('should insert a record', () => {
       return TapestryService.create('role', {name: 'insensitive'})
         .then(role => {
-          assert.equal(role.name, 'insensitive')
+          assert.strictEqual(role.name, 'insensitive')
         })
     })
   })

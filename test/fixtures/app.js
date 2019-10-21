@@ -238,7 +238,7 @@ const App = {
             config: {}
           },
           test_duplicate: require('./testPlugin'),
-        }
+        },
       },
       storeoverride: {
         migrate: 'drop',
@@ -251,6 +251,21 @@ const App = {
         migrate: 'drop',
         orm: 'sequelize',
         uri: 'sqlite://testuser:password@testhost:1234/testdb'
+      },
+      replicatorStore: {
+        orm: 'sequelize',
+        host: '127.0.0.1',
+        dialect: 'postgres',
+        replication: {
+          read: [
+            { username: 'jaumard', password: null, database: 'Sequelize2' },
+            { username: 'jaumard', password: null, database: 'Sequelize' }
+          ],
+          write: {
+            username: 'write-username',
+            password: 'any-password', database: 'Sequelize'
+          }
+        },
       }
     },
     models: {

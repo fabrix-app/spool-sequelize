@@ -17,8 +17,8 @@ describe('lib.Transformer', () => {
       const models = lib.Transformer.getModels(app, Sequelize, connections)
 
       assert.ok(plugins)
-      assert.equal(Sequelize.prototype.helloWorld(), 'hello world')
-      assert.equal(Sequelize.prototype.helloEarth(), 'hello earth')
+      assert.strictEqual(Sequelize.prototype.helloWorld(), 'hello world')
+      assert.strictEqual(Sequelize.prototype.helloEarth(), 'hello earth')
     })
   })
 
@@ -27,19 +27,21 @@ describe('lib.Transformer', () => {
       const connections = lib.Transformer.getConnections(app, Sequelize)
 
       assert(connections.teststore)
-      assert.equal(connections.storeoverride.options.dialect, 'postgres')
+      assert.strictEqual(connections.storeoverride.options.dialect, 'postgres')
+      assert(connections.replicatorStore)
+      assert.deepStrictEqual(connections.replicatorStore.options.replication, app.config.stores.replicatorStore.replication)
     })
     it('should transform uri properly', () => {
       const connections = lib.Transformer.getConnections(app, Sequelize)
       assert(connections.uristore)
-      assert.equal(connections.uristore.options.dialect, 'sqlite')
-      assert.equal(connections.uristore.options.host, 'testhost')
-      assert.equal(connections.uristore.config.host, 'testhost')
-      assert.equal(connections.uristore.config.database, 'testdb')
+      assert.strictEqual(connections.uristore.options.dialect, 'sqlite')
+      assert.strictEqual(connections.uristore.options.host, 'testhost')
+      assert.strictEqual(connections.uristore.config.host, 'testhost')
+      assert.strictEqual(connections.uristore.config.database, 'testdb')
       // test config for other dialects
-      assert.equal(connections.uristore.config.port, 1234)
-      assert.equal(connections.uristore.config.username, 'testuser')
-      assert.equal(connections.uristore.config.password, 'password')
+      assert.strictEqual(connections.uristore.config.port, "1234")
+      assert.strictEqual(connections.uristore.config.username, 'testuser')
+      assert.strictEqual(connections.uristore.config.password, 'password')
     })
   })
   describe('#getModels', () => {

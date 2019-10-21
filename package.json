@@ -61,7 +61,7 @@
     "@fabrix/fabrix": "^1.6.4",
     "@fabrix/lint": "^1.0.0-alpha.3",
     "@fabrix/spool-router": "^1.6.4",
-    "@fabrix/spool-errors": "^1.6.1",
+    "@fabrix/spool-errors": "^1.6.2",
     "@fabrix/spool-tapestries": "^1.6.0",
     "@fabrix/spool-winston": "^1.6.0",
     "@types/lodash": "^4.14.109",
