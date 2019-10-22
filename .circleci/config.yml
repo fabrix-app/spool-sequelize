@@ -24,6 +24,12 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Setup PSQL second Database
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y postgresql-client
+            createdb -h 127.0.0.1 -p 5432 -U postgres Sequelize2
+      - run:
           name: update-npm
           command: 'sudo npm install -g npm@5'
       - restore_cache:

@@ -34,14 +34,14 @@ describe('lib.Transformer', () => {
     it('should transform uri properly', () => {
       const connections = lib.Transformer.getConnections(app, Sequelize)
       assert(connections.uristore)
-      assert.strictEqual(connections.uristore.options.dialect, 'sqlite')
-      assert.strictEqual(connections.uristore.options.host, 'testhost')
-      assert.strictEqual(connections.uristore.config.host, 'testhost')
-      assert.strictEqual(connections.uristore.config.database, 'testdb')
+      assert.strictEqual(connections.uristore.options.dialect, 'postgres')
+      assert.strictEqual(connections.uristore.options.host, '127.0.0.1')
+      assert.strictEqual(connections.uristore.config.host, '127.0.0.1')
+      assert.strictEqual(connections.uristore.config.database, 'Sequelize2')
       // test config for other dialects
-      assert.strictEqual(connections.uristore.config.port, "1234")
-      assert.strictEqual(connections.uristore.config.username, 'testuser')
-      assert.strictEqual(connections.uristore.config.password, 'password')
+      assert.strictEqual(connections.uristore.config.port, 5432)
+      assert.strictEqual(connections.uristore.config.username, 'postgres')
+      assert.strictEqual(connections.uristore.config.password, null)
     })
   })
   describe('#getModels', () => {
