@@ -14,7 +14,14 @@ module.exports = Test = class Test extends Model {
 
   static schema(app, Sequelize) {
     return {
-      name: {type: Sequelize.STRING, allowNull: false}
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      virtual: {
+        type: Sequelize.VIRTUAL,
+        allowNull: true
+      }
     }
   }
 
