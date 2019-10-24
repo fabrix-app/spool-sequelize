@@ -14,7 +14,7 @@ describe('Spool', () => {
   it('should create directly through app.models', (done) => {
     global.app.models.Page.create({name: 'test'})
       .then(page => {
-        assert.equal(page.name, 'test')
+        assert.strictEqual(page.name, 'test')
         done()
       })
       .catch(err => {
@@ -27,8 +27,8 @@ describe('Spool', () => {
     assert(global.app.models.testModel.resolver.sequelize)
     assert(global.app.models.testModel.datastore)
     assert(global.app.models.testModel.sequelize)
-    assert.equal(global.app.models.testModel.sequelize, global.app.models.testModel.resolver.sequelize)
-    assert.equal(global.app.models.testModel.instance, global.app.models.testModel.resolver.sequelizeModel)
+    assert.strictEqual(global.app.models.testModel.sequelize, global.app.models.testModel.resolver.sequelize)
+    assert.strictEqual(global.app.models.testModel.instance, global.app.models.testModel.resolver.sequelizeModel)
     assert(global.app.models.testModel.resolver.plugins)
     done()
   })
@@ -38,8 +38,8 @@ describe('Spool', () => {
     assert(global.app.models.testModel2.resolver.sequelize)
     assert(global.app.models.testModel2.datastore)
     assert(global.app.models.testModel2.sequelize)
-    assert.equal(global.app.models.testModel2.sequelize, global.app.models.testModel2.resolver.sequelize)
-    assert.equal(global.app.models.testModel2.instance, global.app.models.testModel2.resolver.sequelizeModel)
+    assert.strictEqual(global.app.models.testModel2.sequelize, global.app.models.testModel2.resolver.sequelize)
+    assert.strictEqual(global.app.models.testModel2.instance, global.app.models.testModel2.resolver.sequelizeModel)
     assert(global.app.models.testModel2.resolver.plugins)
     done()
   })
@@ -49,21 +49,21 @@ describe('Spool', () => {
     assert(global.app.models.testModel3.resolver.sequelize)
     assert(global.app.models.testModel3.datastore)
     assert(global.app.models.testModel3.sequelize)
-    assert.equal(global.app.models.testModel3.sequelize, global.app.models.testModel3.resolver.sequelize)
-    assert.equal(global.app.models.testModel3.instance, global.app.models.testModel3.resolver.sequelizeModel)
+    assert.strictEqual(global.app.models.testModel3.sequelize, global.app.models.testModel3.resolver.sequelize)
+    assert.strictEqual(global.app.models.testModel3.instance, global.app.models.testModel3.resolver.sequelizeModel)
     assert(global.app.models.testModel3.resolver.plugins)
     done()
   })
 
   it('should access a classLevelMethod', (done) => {
-    assert.equal(global.app.models.testModel.classLevelMethod(), 'foo')
-    assert.equal(global.app.models.testModel.resolver._sequelizeModel.classLevelMethod(), 'foo')
+    assert.strictEqual(global.app.models.testModel.classLevelMethod(), 'foo')
+    assert.strictEqual(global.app.models.testModel.resolver._sequelizeModel.classLevelMethod(), 'foo')
     done()
   })
 
   it('should access a instanceLevelMethod', (done) => {
     const instance = global.app.models.testModel.build({name: 'test'})
-    assert.equal(instance.instanceLevelMethod(), 'bar')
+    assert.strictEqual(instance.instanceLevelMethod(), 'bar')
     assert.ok(instance.app)
     assert.ok(instance.app.config.get('main'))
     done()
@@ -79,9 +79,9 @@ describe('Spool', () => {
 
   it('should access an inherited instanceLevelMethod', (done) => {
     const instance = global.app.models.testModelExtend2.build({name: 'test'})
-    assert.equal(instance.nextInstanceLevelMethod(), 'baz')
-    assert.equal(instance.instanceLevelMethod(), 'bar')
-    assert.equal(instance.superLevelMethod(), 'baf')
+    assert.strictEqual(instance.nextInstanceLevelMethod(), 'baz')
+    assert.strictEqual(instance.instanceLevelMethod(), 'bar')
+    assert.strictEqual(instance.superLevelMethod(), 'baf')
     assert.ok(instance.app)
     assert.ok(instance.app.config.get('main'))
     done()
@@ -100,7 +100,7 @@ describe('Spool', () => {
   it('instance should have access to model', (done) => {
     const instance = global.app.models.testModel.build({name: 'test'})
     assert.ok(instance.resolver)
-    assert.equal(instance.resolver, global.app.models.testModel.resolver)
+    assert.strictEqual(instance.resolver, global.app.models.testModel.resolver)
     done()
   })
 
@@ -122,7 +122,7 @@ describe('Spool', () => {
     })
     instance.save().then(i => {
       assert.ok(i.roles)
-      assert.equal(i.roles.length, 1)
+      assert.strictEqual(i.roles.length, 1)
       done()
     })
       .catch(err => {
@@ -149,12 +149,12 @@ describe('Spool', () => {
     })
     instance.save().then(i => {
       assert.ok(i.roles)
-      assert.equal(i.roles.length, 1)
+      assert.strictEqual(i.roles.length, 1)
       return i.reload()
     })
       .then(i => {
         assert.ok(i.roles)
-        assert.equal(i.roles.length, 1)
+        assert.strictEqual(i.roles.length, 1)
         done()
       })
       .catch(err => {
@@ -275,8 +275,8 @@ describe('Spool', () => {
     it('should create an instance of an extended model', (done) => {
       const instance = global.app.models.testModel2.create({name: 'test', name2: 'test'})
         .then(i => {
-          assert.equal(i.name, 'test')
-          assert.equal(i.name2, 'test')
+          assert.strictEqual(i.name, 'test')
+          assert.strictEqual(i.name2, 'test')
           done()
         })
         .catch(err => {
