@@ -250,7 +250,7 @@ const App = {
       uristore: {
         migrate: 'drop',
         orm: 'sequelize',
-        uri: 'sqlite://testuser:password@testhost:1234/testdb'
+        uri: 'postgres://postgres:@127.0.0.1/Sequelize2'
       },
       replicatorStore: {
         orm: 'sequelize',
@@ -258,8 +258,8 @@ const App = {
         dialect: 'postgres',
         replication: {
           read: [
-            { username: 'jaumard', password: null, database: 'Sequelize2' },
-            { username: 'jaumard', password: null, database: 'Sequelize' }
+            { username: 'postgres', password: null, database: 'Sequelize2' },
+            { username: 'postgres', password: null, database: 'Sequelize' }
           ],
           write: {
             username: 'write-username',

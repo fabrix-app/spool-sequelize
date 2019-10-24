@@ -1,6 +1,7 @@
 import { FabrixService as Service } from '@fabrix/fabrix/dist/common'
 import { isPlainObject, isArray, find, defaultsDeep, extend, defaults } from 'lodash'
 import { FabrixApp } from '@fabrix/fabrix'
+import { Op } from 'sequelize'
 
 const manageError = (app: FabrixApp, err) => {
   if (err.name === 'SequelizeValidationError') {
@@ -110,10 +111,10 @@ export class TapestryService extends Service {
           criteria = {where: criteria}
         }
 
-        query = Model.find(defaults(criteria, modelOptions))
+        query = Model.findOne(defaults(criteria, modelOptions))
       }
       else {
-        query = Model.find(defaults({
+        query = Model.findOne(defaults({
           where: {
             [Model.primaryKeyAttribute]: criteria
           }
@@ -329,18 +330,29 @@ export class TapestryService extends Service {
     else if (association.throughModel) {
       // Get all through tables with the parent
       return this._getThroughModelAssociation(association, parentId)
-        .then(ids => childModel.findAll(extend({
-          where: {
-            $and: [
-              criteria || {},
-              {
-                [childModel.primaryKeyAttribute]: {
-                  $in: ids
-                }
+        .then(function (ids) {
+          if (criteria) {
+            return childModel.findAll(extend({
+              where: {
+                [Op.and]: [
+                  criteria,
+                  {
+                    [childModel.primaryKeyAttribute]: {
+                      [Op.in]: ids
+                    }
+                  }
+                ]
               }
-            ]
+            }, options))
           }
-        }, options)))
+          return childModel.findAll(extend({
+            where: {
+              [childModel.primaryKeyAttribute]: {
+                [Op.in]: ids
+              }
+            }
+          }, options))
+        })
         .catch(err => manageError(this.app, err))
     }
     // Used for things like belongsTo
@@ -407,18 +419,29 @@ export class TapestryService extends Service {
     else if (association.throughModel) {
       // Get all through tables with the parent
       return this._getThroughModelAssociation(association, parentId)
-        .then(ids => childModel.update(values, extend({
-          where: {
-            $and: [
-              criteria || {},
-              {
+        .then(function (ids) {
+          if (criteria) {
+            return childModel.update(values, extend({
+              where: {
                 [childModel.primaryKeyAttribute]: {
-                  $in: ids
+                      [Op.in]: ids
                 }
               }
-            ]
+            }, options))
           }
-        }, options)))
+          return childModel.update(values, extend({
+            where: {
+              [Op.and]: [
+                criteria,
+                {
+                  [childModel.primaryKeyAttribute]: {
+                    [Op.in]: ids
+                  }
+                }
+              ]
+            }
+          }, options))
+        })
         .catch(err => manageError(this.app, err))
     }
     // Used for things like belongsTo
