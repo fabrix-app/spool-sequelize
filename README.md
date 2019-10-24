@@ -186,13 +186,13 @@ We love contributions! Please check out our [Contributor's Guide](https://github
 information on how our projects are organized and how to get started.
 
 ### Release Instructions
-When the master is tagged with a release, it will automatically publish to npm, updates the Changelog and bumps the version.
+When the master is tagged with a release, it will automatically publish to npm, updates the Changelog and bumps the version. Fabrix uses the [standard-version library](https://www.npmjs.com/package/standard-version) to manage it all.
 
 To run a patch release: 
 ```bash
 npm run release -- --release-as patch
 ``` 
-and then commit to master.
+and then commit to master. `git push --follow-tags origin master`
 
 You can also test the release by running
 ```bash
