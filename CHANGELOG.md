@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/fabrix-app/spool-sequelize/compare/v1.6.20...v1.7.0) (2020-02-17)
+
+
+### Features
+
+* upgrades to 6.0 beta ([2c54b30](https://github.com/fabrix-app/spool-sequelize/commit/2c54b30b5bdb1a19ae73b98f47c1e225100e13f5))
+
 ### [1.6.20](https://github.com/fabrix-app/spool-sequelize/compare/v1.6.19...v1.6.20) (2019-10-24)
 
 ### [1.6.19](https://github.com/fabrix-app/spool-sequelize/compare/v1.6.18...v1.6.19) (2019-10-24)
