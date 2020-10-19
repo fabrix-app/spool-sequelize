@@ -185,6 +185,19 @@ By settings `offset` and `limit` you can do some pagination, example `/api/v1/us
 We love contributions! Please check out our [Contributor's Guide](https://github.com/fabrix-app/fabrix/blob/master/CONTRIBUTING.md) for more
 information on how our projects are organized and how to get started.
 
+### Release Instructions
+When the master is tagged with a release, it will automatically publish to npm, updates the Changelog and bumps the version. Fabrix uses the [standard-version library](https://www.npmjs.com/package/standard-version) to manage it all.
+
+To run a patch release: 
+```bash
+npm run release -- --release-as patch
+``` 
+and then commit to master. `git push --follow-tags origin master`
+
+You can also test the release by running
+```bash
+npm run release -- --dry-run --release-as patch
+``` 
 
 ## License
 [MIT](https://github.com/fabrix-app/spool-sequelize/blob/master/LICENSE)
