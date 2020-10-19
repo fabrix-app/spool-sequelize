@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-sequelize",
-  "version": "1.6.18.1",
+  "version": null,
   "description": "Spool - Datastore Spool for Sequelize.js http://sequelizejs.com",
   "scripts": {
     "release": "standard-version",
@@ -55,7 +55,7 @@
     "joi": "^14.3.1",
     "lodash": "^4.17.15",
     "merge-options": "^2.0.0",
-    "sequelize": "^5.21.1"
+    "sequelize": "^4.43.0"
   },
   "devDependencies": {
     "@fabrix/fabrix": "^1.6.4",
