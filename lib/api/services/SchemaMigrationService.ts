@@ -34,17 +34,20 @@ export class SchemaMigrationService extends Service {
   migrateModels(models, connection) {
     let promises = []
     Object.entries(models).forEach(([ _, model ]: [ any, {[key: string]: any}]) => {
+
+      console.log('BRK MODEL MIGRATE', _, model.migrate)
+
       if (model.migrate === 'drop') {
         promises.push(this.dropModel(model, connection))
       }
       else if (model.migrate === 'alter') {
         promises.push(this.alterModel(model, connection))
       }
-      else if (model.migrate === 'none') {
-        return
+      else if (model.migrate === 'none' || model.migrate === 'safe') {
+        // placeholders
       }
       else {
-        return
+        // placeholders
       }
     })
     return promises
@@ -88,9 +91,6 @@ export class SchemaMigrationService extends Service {
       }
       else if (store.migrate === 'alter') {
         promises.push(this.alterDB(store))
-      }
-      else if (store.migrate === 'none') {
-        return
       }
       else {
         promises = [...promises, ...this.migrateModels(store.models, store)]
