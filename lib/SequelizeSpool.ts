@@ -1,6 +1,7 @@
 import { DatastoreSpool } from '@fabrix/fabrix/dist/common/spools/datastore'
 
-import Sequelize from 'sequelize'
+import { Sequelize } from 'sequelize'
+// import Sequelize from 'sequelize'
 
 import { Validator } from './validator'
 import { Transformer } from './transformer'
@@ -13,7 +14,7 @@ import * as api  from './api/index'
 
 
 export class SequelizeSpool extends DatastoreSpool {
-  _datastore = Sequelize
+  _datastore
 
   private _plugins: {[key: string]: any} = { }
   private _connections: {[key: string]: any} = { }
@@ -25,16 +26,26 @@ export class SequelizeSpool extends DatastoreSpool {
       pkg: pkg,
       api: api
     })
+    this._datastore = Sequelize
   }
 
+  /**
+   * Get all the Sequelize Plugins that were installed
+   */
   get plugins () {
     return this._plugins || {}
   }
 
+  /**
+   * Get all the Sequelize Connections that were made
+   */
   get connections () {
     return this._connections || {}
   }
 
+  /**
+   * Get all the Fabrix Models that are bound to Sequelize
+   */
   get models() {
     return this._models || {}
   }
@@ -74,7 +85,8 @@ export class SequelizeSpool extends DatastoreSpool {
     // This set tracks the plugins that are being added to a single sequelize instance
     this._datastore['plugins'] = this._datastore['plugins'] || new Map([['plugins', new Set()]])
 
-    this._plugins = Transformer.getPlugins(this.app)
+    // Get all the global plugins
+    this._plugins = Transformer.getPlugins(this.app, this._datastore)
     // Holds a collection of the connections made through Sequelize
     this._connections = Transformer.getConnections(this.app, this._datastore, this.plugins)
     // Holds a collection of the Sequelize models

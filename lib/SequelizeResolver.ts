@@ -30,6 +30,9 @@ export class SequelizeResolver extends FabrixResolver {
     return this._sequelizeModel
   }
 
+  /**
+   * Fabrix Specific to spool-models
+   */
   get dataStoreModel() {
     return this._sequelizeModel
   }
@@ -38,6 +41,9 @@ export class SequelizeResolver extends FabrixResolver {
     return this._sequelize
   }
 
+  /**
+   * Get plugins installed
+   */
   get plugins() {
     return this._sequelize ? this._sequelize.plugins : new Set()
   }
@@ -64,7 +70,16 @@ export class SequelizeResolver extends FabrixResolver {
     return this._sequelizeModel
   }
 
-  public connect(modelName, schema, options) {
+  public connect(
+    modelName: string,
+    schema: {
+      [key: string]: {
+        [key: string]: any,
+        type: any
+      }
+    },
+    options: {[key: string]: any} = {}
+  ) {
     this._options = options
     this._schema = schema
 
@@ -302,6 +317,15 @@ export class SequelizeResolver extends FabrixResolver {
   /**
    *
    */
+  findCreateFind(criteria) {
+    if (this._sequelizeModel) {
+      return this._sequelizeModel.findCreateFind(criteria)
+    }
+  }
+
+  /**
+   *
+   */
   findOne(criteria) {
     if (this._sequelizeModel) {
       return this._sequelizeModel.findOne(criteria)
@@ -479,6 +503,12 @@ export class SequelizeResolver extends FabrixResolver {
   upsert(values, options = {}) {
     if (this._sequelizeModel) {
       return this._sequelizeModel.upsert(values, options)
+    }
+  }
+
+  addHook(values, options = {}) {
+    if (this._sequelizeModel) {
+      return this._sequelizeModel.addHook(values, options)
     }
   }
 }

@@ -2,6 +2,7 @@ import { FabrixApp } from '@fabrix/fabrix'
 import { FabrixModel } from '@fabrix/fabrix/dist/common'
 import { pickBy, isString, startsWith } from 'lodash'
 import { SequelizeResolver } from './SequelizeResolver'
+import { Sequelize } from 'sequelize'
 
 export const Transformer = {
   BreakException: {},
@@ -68,7 +69,10 @@ export const Transformer = {
     '^(RANGE)\((\w*)\)': 'RANGE($2)',
     '^(GEOMETRY)': 'GEOMETRY',
     '^(GEOMETRY)\((\w*)\)': 'GEOMETRY($2)',
-    '^(GEOMETRY)\((\w*),\s(\d*)\)': 'GEOMETRY($2, $3)'
+    '^(GEOMETRY)\((\w*),\s(\d*)\)': 'GEOMETRY($2, $3)',
+    '^(VIRTUAL)': 'VIRTUAL',
+    '^(VIRTUAL)\((\w*)\)': 'VIRTUAL($2)',
+    '^(VIRTUAL)\((\w*),\s(\d*)\)': 'VIRTUAL($2, $3)',
   },
 
   /**
@@ -93,7 +97,13 @@ export const Transformer = {
     return props
   },
 
-  getModelOptions: (app: FabrixApp, sequelize, model) => {
+  /**
+   * Normalize and return model options from model constuctor
+   * @param app
+   * @param sequelize
+   * @param model
+   */
+  getModelOptions: (app: FabrixApp, sequelize: Sequelize, model) => {
     const config = model.constructor.config(app, sequelize)
     // Options must be
     if (!config.options) {
@@ -107,12 +117,22 @@ export const Transformer = {
     return config.options
   },
 
-  getModelSchema: (app: FabrixApp, sequelize, model) => {
-    const schema = Transformer.transformSchema(sequelize, model.constructor.schema(app, sequelize))
-    return schema
+  /**
+   * Get the Models' transformed Schema
+   * @param app
+   * @param sequelize
+   * @param model
+   */
+  getModelSchema: (app: FabrixApp, sequelize: Sequelize, model) => {
+    return Transformer.transformSchema(sequelize, model.constructor.schema(app, sequelize))
   },
 
-  replaceDataType: (sequelize, dataType) => {
+  /**
+   * Utility for chainging waterline-esque strings into Sequelize DataType(s)
+   * @param sequelize
+   * @param dataType
+   */
+  replaceDataType: (sequelize: Sequelize, dataType) => {
     let transformed
     try {
       Object.keys(Transformer.dataTypes).forEach(type => {
@@ -174,7 +194,14 @@ export const Transformer = {
     return methods
   },
 
-  defineModel: (app: FabrixApp, sequelize, model: FabrixModel, connections) => {
+  /**
+   * Define the Model on the Connection
+   * @param app
+   * @param sequelize
+   * @param model
+   * @param connections
+   */
+  defineModel: (app: FabrixApp, sequelize: Sequelize, model: FabrixModel, connections) => {
     const modelName = model.constructor.name
     const modelConfig = model.config
     const store = modelConfig.store
@@ -226,11 +253,17 @@ export const Transformer = {
    * @param {FabrixApp} app
    * @param {Sequelize} sequelize
    * @param {String} name
-   * @param  {Object} config from config.stores<n>
+   * @param {Object} config from config.stores<n>
    * @param {Object} plugins global plugins from config.sequelize
    * @return {Sequelize} Sequelize instance
    */
-  createConnectionsFromConfig (app: FabrixApp, sequelize, name, config: {[key: string]: any}, plugins: {[key: string]: any} = {}) {
+  createConnectionsFromConfig (
+    app: FabrixApp,
+    sequelize,
+    name: string,
+    config: {[key: string]: any},
+    plugins: {[key: string]: any} = {}
+  ) {
     const logger = function(val) {
       // https://github.com/sequelize/sequelize/issues/3781#issuecomment-421282703
       // If for whatever reason the Sequelize logger exports a Sequelize object, then, this must be done
@@ -251,7 +284,7 @@ export const Transformer = {
     let Seq = sequelize
 
     // Quick check to see if sequelize is already started
-    if (Seq instanceof sequelize) {
+    if (Seq instanceof Sequelize) {
       throw new Error('Sequelize is already initialized and cannot be loaded again, check your plugins')
     }
 
@@ -327,7 +360,7 @@ export const Transformer = {
   },
 
   /**
-   * Transform the FabrixApp "app.config.stores" into a Sequelize object
+   * Transform the FabrixApp "app.config.stores" with "orm: 'sequelize'" into a Sequelize object
    */
   getConnections (app: FabrixApp, sequelize, plugins: {[key: string]: any} = {}) {
     const stores = Transformer.pickStores(app.config.get('stores'))
@@ -361,6 +394,7 @@ export const Transformer = {
 
   /**
    * Call the associate method on configured models
+   * This does the association for Sequelize relationships
    */
   associateModels (app: FabrixApp, models, sequelizeModels) {
     Object.keys(models).forEach( modelName => {
@@ -376,8 +410,7 @@ export const Transformer = {
   /**
    * Add Plugins
    */
-  getPlugins(app: FabrixApp) {
-    const plugins = app.config.get('sequelize.plugins')
-    return plugins
+  getPlugins(app: FabrixApp, sequelize) {
+    return app.config.get('sequelize.plugins')
   }
 }
