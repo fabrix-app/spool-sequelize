@@ -336,7 +336,11 @@ export const Transformer = {
       _sequelize[key] = Transformer.createConnectionsFromConfig(app, sequelize, key, stores[key], plugins)
       _sequelize[key].fabrixApp = app
       _sequelize[key].migrate = stores[key].migrate
-      _sequelize[key].models = {}
+      _sequelize[key].models = pickBy(app.models, (_model, name) => {
+        const modelConfig = _model.config
+        const store = modelConfig.store || app.config.get('models.defaultStore')
+        return store === key
+      })
     })
 
     return _sequelize
