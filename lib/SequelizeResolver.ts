@@ -103,6 +103,9 @@ export class SequelizeResolver extends FabrixResolver {
     this._sequelizeModel.app = this.app
     // this._sequelizeModel.model = this.model
 
+    // Set the config for migrate on the sequelize model
+    this._sequelizeModel.migrate = this.model.migrate
+
     // A helpful exposure of the instance of Sequelize being used
     this._sequelize = this._sequelizeModel.sequelize
     this.model.datastore = this.model['sequelize'] = this.datastore

@@ -229,6 +229,9 @@ export const Transformer = {
     model.resolver.connection = connection
     model.resolver.connect(modelName, schema, options)
 
+    // Assign the model to the connection models
+    // connection.models[modelName] = model
+
     return model
   },
 
@@ -367,8 +370,11 @@ export const Transformer = {
     const _sequelize = {}
     Object.keys(stores).forEach(key => {
       _sequelize[key] = Transformer.createConnectionsFromConfig(app, sequelize, key, stores[key], plugins)
+      // Set fabrix to the store
       _sequelize[key].fabrixApp = app
+      // Add the migrate onto the store
       _sequelize[key].migrate = stores[key].migrate
+      // Declare models now, so that they are never undefined
       _sequelize[key].models = {}
     })
 
