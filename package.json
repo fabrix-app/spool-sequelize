@@ -66,7 +66,7 @@
     "@fabrix/spool-winston": "^1.6.0",
     "@types/lodash": "^4.14.144",
     "@types/node": "~12.11.2",
-    "mocha": "^6",
+    "mocha": "^10",
     "nyc": "^14.1.1",
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
